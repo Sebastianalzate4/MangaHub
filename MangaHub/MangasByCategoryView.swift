@@ -28,6 +28,7 @@ struct MangasByCategoryView: View {
             viewmodel.cType = type
             viewmodel.categorySelected(category: category)
         }
+        .navigationTitle(category)
         .alert("Something went wrong", isPresented: $viewmodel.showAlert, presenting: viewmodel.myErrorSpecific, actions: { error in
             Button("Try again") {
                 switch error {
@@ -49,7 +50,10 @@ struct MangasByCategoryView: View {
                 Button(action: {
                     pathCategories = NavigationPath()
                 }) {
-                    Text("Back to home")
+                    HStack{
+                        Text("Restart")
+                        Image(systemName: "arrowshape.turn.up.backward.fill")
+                    }
                 }
             }
         }
@@ -62,4 +66,5 @@ struct MangasByCategoryView: View {
         MangasByCategoryView(pathCategories: .constant(NavigationPath()),category: "Action", type: .genres)
     }
 }
+
 

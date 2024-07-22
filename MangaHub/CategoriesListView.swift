@@ -17,27 +17,29 @@ struct CategoriesListView: View {
             VStack {
                 ScrollView(.horizontal) {
                     HStack {
-                        Button("Genres") {
+                        Button {
                             viewmodel.fetchGenres()
                             viewmodel.cType = .genres
+                        } label: {
+                            Text("Genres")
                         }
                         .mangaHubButtonCategories(isSelected: viewmodel.cType == .genres)
-//                        .buttonStyle(MangaHubCategoriesButtonStyle(isSelected: viewmodel.cType == .genres))
                         
-                        
-                        Button("Demographics") {
+                        Button {
                             viewmodel.fetchDemographics()
                             viewmodel.cType = .demographics
+                        } label: {
+                            Text("Demographics")
                         }
                         .mangaHubButtonCategories(isSelected: viewmodel.cType == .demographics)
-//                        .buttonStyle(MangaHubCategoriesButtonStyle(isSelected: viewmodel.cType == .demographics))
                         
-                        Button("Themes") {
+                        Button {
                             viewmodel.fetchThemes()
                             viewmodel.cType = .themes
+                        } label: {
+                            Text("Themes")
                         }
                         .mangaHubButtonCategories(isSelected: viewmodel.cType == .themes)
-//                        .buttonStyle(MangaHubCategoriesButtonStyle(isSelected: viewmodel.cType == .themes))
                     }
                     .padding(.horizontal)
                 }
@@ -47,18 +49,7 @@ struct CategoriesListView: View {
                 Group {
                     if viewmodel.categories.isEmpty {
                         VStack {
-                            Image(systemName: "arrowshape.up.circle.fill")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 50, height: 50)
-                                .foregroundColor(.orange)
-                            Text("Select a Category")
-                                .bold()
-                                .font(.title3)
-                            Text("to make the mangas show up")
-                                .foregroundColor(.secondary)
-                                .font(.callout)
-                                .bold()
+                            MangaUnavailableView(systemName: "arrowshape.up.circle.fill", title: "Select a Category", subtitle: "Display a list of mangas by a specific category")
                         }
                         .padding()
                     } else {
@@ -85,12 +76,14 @@ struct CategoriesListView: View {
                 MangasByAuthorView(path: $pathCategories, author: author)
             }
             .alert("Something went wrong", isPresented: $viewmodel.showAlert, presenting: viewmodel.myError) { error in
-                Button("Try again") {
+                Button {
                     switch error {
                     case .fetchGenres : viewmodel.fetchGenres()
                     case .fetchThemes : viewmodel.fetchThemes()
                     case .fetchDemographics : viewmodel.fetchDemographics()
                     }
+                } label: {
+                    Text("Try Again")
                 }
                 Button {
                     viewmodel.showAlert = false

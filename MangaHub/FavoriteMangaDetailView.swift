@@ -17,89 +17,157 @@ struct FavoriteMangaDetailView: View {
     var body: some View {
         
         ScrollView {
-          
-            AsyncImage(url: viewmodel.manga.mainPictureURL) { image in
-                image
-                    .resizable()
-                    .scaledToFit()
-                    .clipShape(RoundedRectangle(cornerRadius: 20))
-                    .frame(width: 250, height: 250)
-            } placeholder: {
-                ProgressView()
-                    .controlSize(.extraLarge)
-                    .scaledToFit()
-                    .frame(width: 250, height: 250)
-            }
-            .padding()
-            
-            
-            Text(viewmodel.manga.title)
-                .font(.title)
-                .bold()
-            Text(viewmodel.manga.sypnosis ?? "")
-                .multilineTextAlignment(.leading)
-                .lineLimit(isExpanded ? nil : 5)
-                .padding(EdgeInsets(top: 0, leading: 20, bottom: 10, trailing: 20))
-            Button {
-                withAnimation {
-                    isExpanded.toggle()
-                }
-            } label: {
-                Text(isExpanded ? "Show Less" : "Read More")
-            }
-            
-            Link("Go to manga website", destination: viewmodel.manga.validURL)
-            
-            VStack {
-                HStack{
-                    Text("Authors")
+ 
+            Group{
+                if let volumes = viewmodel.manga.volumes {
+                    
+                    Text("Reading Section")
+                        .font(.title)
                         .bold()
-                        .font(.title2)
-                        .padding(.leading)
-                    Spacer()
-                }
-                ScrollView(.horizontal){
-                    HStack(alignment: .center){
-                        ForEach(viewmodel.manga.authors) { author in
-                            Text(author.authorCompleteName)
-                                .padding(.leading)
-                                .padding(.bottom)
-                                .foregroundStyle(Color.primary)
+                        .padding()
+                    
+                    VStack {
+                        Text("Total Volumes:")
+                            .padding()
+                            .font(.title3)
+                            .bold()
+                        
+                        Text("\(volumes)")
+                            .font(.title)
+                            .bold()
+                    }
+                    
+                    CustomGaugeView(value: Double(viewmodel.reading), scale: Double(volumes), isPercentage: true, size: .large)
+                        .padding()
+                    
+ 
+                    Text("Volumes Read:")
+                        .padding()
+                        .font(.title3)
+                        .bold()
+
+    
+                    HStack {
+                        Spacer()
+                       
+                        Button {
+                            viewmodel.reading -= 1
+                            viewmodel.persistReadingVolume()
+                        } label: {
+                            Image(systemName: "minus")
+                                .foregroundColor(viewmodel.reading <= 0 ? .gray : .white)
+                                .frame(width: 60, height: 60)
+                                .background(viewmodel.reading <= 0 ? Color.gray.opacity(0.3) : Color.mangaHubColor)
+                                .clipShape(Circle())
+                        }
+                        .disabled(viewmodel.reading <= 0)
+                       
+                        Spacer()
+                        
+                        Text("\(viewmodel.reading)")
+                            .font(.title)
+                            .bold()
+                        
+                        Spacer()
+                        
+                        Button {
+                            viewmodel.reading += 1
+                            viewmodel.persistReadingVolume()
+                        } label: {
+                            Image(systemName: "plus")
+                                .foregroundColor(viewmodel.reading >= volumes ? .gray : .white)
+                                .frame(width: 60, height: 60)
+                                .background(viewmodel.reading >= volumes ? Color.gray.opacity(0.3) : Color.mangaHubColor)
+                                .clipShape(Circle())
+                        }
+                        .disabled(viewmodel.reading >= volumes)
+                        
+                        Spacer()
+                    }
+                    
+                    Slider(value: Binding(
+                        get: { Double(viewmodel.reading) },
+                        set: { newValue in
+                            viewmodel.reading = Int(newValue)
+                            viewmodel.persistReadingVolume()
+                        }
+                    ), in: 0...Double(volumes))
+                    .tint(Color.mangaHubColor)
+                    .padding()
+                    
+                    Divider()
+                        .padding()
+                    
+                    Text("Purchase Section")
+                        .font(.title)
+                        .bold()
+                        .padding()
+                    
+                    CustomGaugeView(value: Double(viewmodel.manga.purchasedVolumes.count), scale: Double(volumes), isPercentage: true, size: .large)
+                        .padding()
+                    
+                    HStack {
+                        VStack {
+                            Text("Purchased:")
+                                .padding()
+                                .font(.title3)
+                                .bold()
+                            
+                            Text("\(viewmodel.manga.purchasedVolumes.count)")
+                                .font(.title)
+                                .bold()
+                        }
+                        
+                        VStack {
+                            Text("Total Volumes:")
+                                .padding()
+                                .font(.title3)
+                                .bold()
+                            
+                            Text("\(volumes)")
+                                .font(.title)
+                                .bold()
                         }
                     }
+                    
+                    
+                    
+                    Button {
+                        if viewmodel.manga.volumes != nil {
+                            showVolumes = true
+                        }
+                    } label: {
+                        Text("+ Add New")
+                            .font(.subheadline)
+                            .bold()
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 40)
+                            .foregroundColor(.white)
+                            .background(Color.mangaHubColor)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                            .padding(.horizontal)
+                    }
+                    
+                } else {
+                    VStack {
+                        MangaUnavailableView(systemName: "xmark.circle.fill", title: "Ooops!", subtitle: "This manga does not have volumes registered")
+                        
+                    }
+                    .padding(.init(top: 150, leading: 10, bottom: 150, trailing: 10))
                 }
             }
             
             
-            Stepper(value: $viewmodel.reading, in: 0...(viewmodel.manga.volumes ?? 0)) {
-                Text("Reading volume: \(viewmodel.reading)")
-            }
+            Divider()
+                .padding()
             
-            Button("Guardar Cambios") {
-                viewmodel.persistReadingVolume()
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: 40)
-            .foregroundColor(.white)
-            .background(Color.orange)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
-            .padding(.horizontal)
+            Text("Details Section")
+                .font(.title)
+                .bold()
+                .padding()
             
+            DetailsSectionView(manga: viewmodel.manga)
             
-            
-            Text("Bought volumes: \(viewmodel.manga.boughtVolumes.count) of \(viewmodel.manga.volumes ?? 0)")
-            
-            Button("Show") {
-                if viewmodel.manga.volumes != nil {
-                    showVolumes = true
-                }
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: 40)
-            .foregroundColor(.white)
-            .background(LinearGradient(colors: [Color.yellow, Color.orange, Color.yellow], startPoint: .leading, endPoint: .trailing))
-            .clipShape(Capsule())
-            .padding(.horizontal)
             
         }
         .navigationTitle(viewmodel.manga.title)
@@ -109,15 +177,6 @@ struct FavoriteMangaDetailView: View {
                     Label("Share", systemImage: "square.and.arrow.up")
                 }
             }
-            
-            //            ToolbarItem(placement: .secondaryAction) {
-            //                Button {
-            //                    // Función para guardar cambios
-            //                } label: {
-            //                    Image(systemName: "square.and.arrow.down")
-            //                }
-            //            }
-            
         }
         .sheet(isPresented: $showVolumes) {
             PurchasedVolumesView(viewmodel: viewmodel)

@@ -17,13 +17,13 @@ struct MangaPosterView: View {
                 .resizable()
                 .scaledToFit()
                 .clipShape(RoundedRectangle(cornerRadius: 20))
-                .frame(width: size == .small ? 150 : 200, height: size == .small ? 150 : 200)
+                .frame(width: size == .small ? 100 : 200, height: size == .small ? 150 : 200)
         } placeholder: {
             ProgressView()
                 .controlSize(.extraLarge)
                 .scaledToFit()
                 .clipShape(RoundedRectangle(cornerRadius: 20))
-                .frame(width: size == .small ? 150 : 200, height: size == .small ? 150 : 200)
+                .frame(width: size == .small ? 100 : 200, height: size == .small ? 150 : 200)
         }
     }
 }

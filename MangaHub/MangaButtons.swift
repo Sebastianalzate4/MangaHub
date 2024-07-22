@@ -21,7 +21,7 @@ extension View {
     }
 }
 
-
+// FORMA 1
 extension View {
     func mangaHubButtonCategories(isSelected: Bool) -> some View {
         self
@@ -31,7 +31,7 @@ extension View {
             .foregroundColor(Color.white)
             .multilineTextAlignment(.center)
             .frame(maxWidth: .infinity)
-            .background(isSelected ? Color.blue : Color.mangaHubColor)
+            .background(isSelected ? Color.gray : Color.mangaHubColor)
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .overlay(
                 RoundedRectangle(cornerRadius: 10)
@@ -40,6 +40,8 @@ extension View {
     }
 }
 
+
+// FORMA 2
 struct MangaHubCategoriesButtonStyle: ButtonStyle {
     var isSelected: Bool
 

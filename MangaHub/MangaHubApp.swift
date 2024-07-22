@@ -23,7 +23,7 @@ struct MangaHubApp: App {
                 } else {
                     
                     if isFirstLaunch {
-                        PagerView(isFirstLaunch: $isFirstLaunch)
+                        OnboardingView(isFirstLaunch: $isFirstLaunch)
                     } else {
                         MainTabItemView()
                             

@@ -10,78 +10,62 @@ import SwiftUI
 struct MangaDetailView: View {
     
     @StateObject var viewmodel: DetailViewModel
-    
     @State var isExpanded: Bool = false
     @State private var showVolumes : Bool = false
     
     let flexibleColumns : [GridItem] = [GridItem(.flexible()) , GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     
+    let deviceType = UIDevice.current.userInterfaceIdiom
+    
     var body: some View {
+        
         ScrollView {
-            AsyncImage(url: viewmodel.manga.mainPictureURL) { image in
-                image
-                    .resizable()
-                    .scaledToFit()
-                    .clipShape(RoundedRectangle(cornerRadius: 20))
-                    .frame(width: 250, height: 250)
-            } placeholder: {
-                ProgressView()
-                    .controlSize(.extraLarge)
-                    .scaledToFit()
-                    .clipShape(RoundedRectangle(cornerRadius: 20))
-                    .frame(width: 250, height: 250)
-            }
-            .padding()
             
-            Text(viewmodel.manga.title)
-                .font(.title)
-                .bold()
-            Text(viewmodel.manga.sypnosis ?? "")
-                .multilineTextAlignment(.leading)
-                .lineLimit(isExpanded ? nil : 5)
-                .padding(EdgeInsets(top: 0, leading: 20, bottom: 10, trailing: 20))
-            Button {
-                withAnimation {
-                    isExpanded.toggle()
+            VStack {
+                AsyncImage(url: viewmodel.manga.mainPictureURL) { image in
+                    image
+                        .resizable()
+                        .scaledToFit()
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                        .frame(width: 350, height: 350)
+                } placeholder: {
+                    ProgressView()
+                        .controlSize(.extraLarge)
+                        .scaledToFit()
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                        .frame(width: 350, height: 350)
                 }
-            } label: {
-                Text(isExpanded ? "Show Less" : "Read More")
-            }
-            
-            Link("Go to manga website", destination: viewmodel.manga.validURL)
-            
-            
-            // BOTON DE FAVORITOS
-            Button {
-                viewmodel.saveFavourite()
-                viewmodel.isDisable = true
-            } label: {
-                Label(viewmodel.isDisable ? "Added to Favourites" : "Make me Favourite", systemImage: viewmodel.isDisable ? "checkmark.circle" : "star")
-            }
-            .buttonStyle(.borderedProminent)
-            .tint(.orange)
-            .padding()
-            .disabled(viewmodel.isDisable)
-            
-            HStack{
-                Text("Authors").bold().font(.title2)
-                    .padding(.leading)
-                Spacer()
-            }
-            ScrollView(.horizontal){
-                HStack(alignment: .center) {
-                    ForEach(viewmodel.manga.authors) { author in
-                        NavigationLink(value: author) {
-                            
-                            Text(author.authorCompleteName)
-                                .padding(.leading)
-                                .padding(.bottom)
-                        }
-                    }
+                .padding()
+                
+                Text(viewmodel.manga.title)
+                    .font(.title)
+                    .bold()
+                
+                
+                // BOTON DE FAVORITOS
+                Button {
+                    viewmodel.saveFavourite()
+                    viewmodel.isDisable = true
+                } label: {
+                    Label(viewmodel.isDisable ? "Added to Favourites" : "Make me Favourite", systemImage: viewmodel.isDisable ? "checkmark.circle" : "star")
                 }
+                .font(.system(.headline, design: .rounded))
+                .frame(maxWidth: .infinity)
+                .frame(height: 40)
+                .foregroundColor(.white)
+                .background(viewmodel.isDisable ? Color.gray : Color.mangaHubColor)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .padding(.horizontal)
+                .disabled(viewmodel.isDisable)
+                .animation(.interactiveSpring(response: 0.5, dampingFraction: 1, blendDuration: 1), value: viewmodel.isDisable)
+     
+                
+
+                FilterDetailView(viewmodel: viewmodel)
+                    .padding(.init(top: 10, leading: 10, bottom: 0, trailing: 10))
+
             }
         }
-        .navigationTitle(viewmodel.manga.title)
         .onAppear {
             viewmodel.checkFavourite()
         }
@@ -102,7 +86,7 @@ struct MangaDetailView: View {
         }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                ShareLink(item: viewmodel.manga.validURL ) {
+                ShareLink(item: viewmodel.manga.validURL) {
                     Label("Share", systemImage: "square.and.arrow.up")
                 }
             }
@@ -115,5 +99,7 @@ struct MangaDetailView: View {
         MangaDetailView(viewmodel: DetailViewModel(manga: .preview))
     }
 }
+
+
 
 

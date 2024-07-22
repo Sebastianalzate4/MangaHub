@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct LaunchScreenView: View {
+    
     var body: some View {
         
         ZStack {
@@ -28,9 +29,7 @@ struct LaunchScreenView: View {
                 ProgressView()
                     .controlSize(.extraLarge)
                     .scaledToFit()
-
             }
-
         }
     }
 }

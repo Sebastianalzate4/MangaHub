@@ -8,11 +8,30 @@
 import SwiftUI
 
 struct PageView: View {
+    
+    var page: Page
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            Image(page.imageName)
+                .resizable()
+                .scaledToFit()
+                .padding()
+            
+            Text(page.title)
+                .font(.largeTitle)
+                .bold()
+                .padding()
+            
+            Text(page.description)
+                .font(.body)
+                .multilineTextAlignment(.center)
+                .padding()
+  
+        }
     }
 }
 
 #Preview {
-    PageView()
+    PageView(page: Page.pages[1])
 }

@@ -28,12 +28,32 @@ struct Manga: Codable, Identifiable, Hashable {
     let themes: [Theme]
     
     // Nuevas propiedades para mi modelo de presentación:
-    var boughtVolumes: [Int]
+    var purchasedVolumes: [Int]
     var readingVolume: Int
-    var isCompleted: Bool
     
     var formattedScore: String {
         score.formatted(.number.precision(.fractionLength(1)))
+    }
+    
+    var formattedStatus: String {
+        if status == "finished" {
+            return "Finished"
+        } else {
+            return "Currently Publishing"
+        }
+    }
+    
+    var formattedVolumes: String {
+        volumes.map { "\($0)" } ?? "No Volumes Registered"
+    }
+    //    var formattedChapters: String {
+    //        if let episodes = chapters {
+    //            return String(episodes)
+    //        }
+    //        return "No Chapters Registered"
+    //    }
+    var formattedChapters: String {
+        chapters.map { "\($0)" } ?? "No Chapters Registered"
     }
     
     var formattedStartDate: String {
@@ -42,7 +62,8 @@ struct Manga: Codable, Identifiable, Hashable {
     }
     
     var formattedEndDate: String {
-        endDate?.formatted(date: .abbreviated, time: .omitted) ?? "Currently Active"
+//        endDate?.formatted(date: .abbreviated, time: .omitted) ?? "Currently Active"
+        endDate?.formatted(.dateTime.year()) ?? "Currently Active"
     }
     
     var mainPictureURL: URL {

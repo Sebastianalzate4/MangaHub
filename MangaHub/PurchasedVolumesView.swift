@@ -36,7 +36,7 @@ struct PurchasedVolumesView: View {
                 LazyVGrid(columns: flexibleColumns) {
                     ForEach(1...volumes, id: \.self) { volumen in
                         Button {
-                            viewmodel.persistBoughtVolumes(volume: volumen)
+                            viewmodel.persistPurchasedVolumes(volume: volumen)
                         } label: {
                             Text(String(volumen))
                                 .foregroundStyle(.white)
@@ -46,7 +46,7 @@ struct PurchasedVolumesView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                         .alert("Something went wrong", isPresented: $viewmodel.showAlert) {
                             Button("Try again"){
-                                viewmodel.persistBoughtVolumes(volume: volumen)
+                                viewmodel.persistPurchasedVolumes(volume: volumen)
                             }
                             Button {
                                 viewmodel.showAlert = false

@@ -53,7 +53,9 @@ struct CustomGaugeView: View {
 #Preview {
     VStack {
         CustomGaugeView(value: 7, scale: 10.0, isPercentage: true, size: .large)
+            .padding()
         CustomGaugeView(value: 7, scale: 10.0, isPercentage: false, size: .small)
+            .padding()
     }
 }
 

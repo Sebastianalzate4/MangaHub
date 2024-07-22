@@ -44,7 +44,7 @@ final class DetailFavoriteViewModel: ObservableObject {
     }
     
     func showBoughtVolumes() {
-        volumes = manga.boughtVolumes
+        volumes = manga.purchasedVolumes
     }
     
     func persistReadingVolume() {
@@ -62,7 +62,7 @@ final class DetailFavoriteViewModel: ObservableObject {
     }
     
     
-    func persistBoughtVolumes(volume: Int) {
+    func persistPurchasedVolumes(volume: Int) {
         do {
             try loadData()
             if volumes.contains(volume) {
@@ -70,7 +70,7 @@ final class DetailFavoriteViewModel: ObservableObject {
             } else {
                 volumes.append(volume)
             }
-            manga.boughtVolumes = volumes
+            manga.purchasedVolumes = volumes
             if let index = savedFavouriteMangas.firstIndex(where: {$0.id == manga.id}) {
                 savedFavouriteMangas[index] = manga
             }

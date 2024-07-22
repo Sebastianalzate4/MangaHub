@@ -17,8 +17,7 @@ struct OnboardingView: View {
         
         NavigationStack {
             ZStack {
-                Color.gray
-                    .opacity(0.2)
+                Color.white
                     .ignoresSafeArea()
                 
                 TabView(selection: $selectedIndex) {
@@ -35,13 +34,19 @@ struct OnboardingView: View {
                                         }
                                     } label: {
                                         Text("Previous")
+                                            .font(.title3)
                                             .frame(maxWidth: .infinity)
                                             .frame(height: 50)
-                                            .foregroundColor(.mangaHubColor)
+                                            .foregroundColor(.white)
                                             .bold()
-                                            .background(Color.white)
+                                            .background(Color.black)
                                             .clipShape(RoundedRectangle(cornerRadius: 10))
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 10)
+                                                    .stroke(Color.black, lineWidth: 0.5)
+                                            )
                                             .padding(.horizontal)
+                                           
                                     }
                                     
                                 }
@@ -54,28 +59,39 @@ struct OnboardingView: View {
                                     }
                                 } label: {
                                     if page.id == pages.last?.id {
-                                        Text("Go to the app!")
+                                        Text("Start!")
+                                            .font(.title3)
                                             .frame(maxWidth: .infinity)
                                             .frame(height: 50)
                                             .foregroundColor(.white)
                                             .bold()
                                             .background(Color.mangaHubColor)
                                             .clipShape(RoundedRectangle(cornerRadius: 10))
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 10)
+                                                    .stroke(Color.black, lineWidth: 0.5)
+                                            )
                                             .padding(.horizontal)
                                     } else {
                                         Text("Next")
+                                            .font(.title3)
                                             .frame(maxWidth: .infinity)
                                             .frame(height: 50)
                                             .foregroundColor(.white)
                                             .bold()
                                             .background(Color.mangaHubColor)
                                             .clipShape(RoundedRectangle(cornerRadius: 10))
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 10)
+                                                    .stroke(Color.black, lineWidth: 0.5)
+                                            )
                                             .padding(.horizontal)
+                                            
                                     }
                                 }
                                 
                             }
-                            .offset(y: 300)
+                            .offset(y: 50)
                             
                             Spacer()
                         }
@@ -96,8 +112,8 @@ struct OnboardingView: View {
                 .animation(.easeInOut, value: selectedIndex)
                 .tabViewStyle(.page)
                 .onAppear {
-                    UIPageControl.appearance().currentPageIndicatorTintColor = .systemPink
-                    UIPageControl.appearance().pageIndicatorTintColor = .white
+                    UIPageControl.appearance().currentPageIndicatorTintColor = .orange
+                    UIPageControl.appearance().pageIndicatorTintColor = .secondaryLabel
                     UIPageControl.appearance().isHidden = true
                 }
             }

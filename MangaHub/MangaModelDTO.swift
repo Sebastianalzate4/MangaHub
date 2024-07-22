@@ -61,22 +61,21 @@ struct MangaDTO: Codable {
             volumes: volumes,
             titleJapanese: titleJapanese,
             themes: themes,
-            boughtVolumes: [],
-            readingVolume: 0,
-            isCompleted: false
+            purchasedVolumes: [],
+            readingVolume: 0
         )
     }
     
 }
 
 
-struct Demographic: Codable, Hashable {
+struct Demographic: Codable, Hashable, Identifiable {
     let id: String
     let demographic: String
 }
 
 
-struct Genre: Codable, Hashable {
+struct Genre: Codable, Hashable, Identifiable {
     let id: String
     let genre: String
 }
@@ -94,7 +93,7 @@ struct Author: Codable, Hashable, Identifiable {
 }
 
 
-struct Theme: Codable, Hashable {
+struct Theme: Codable, Hashable, Identifiable {
     let id: String
     let theme: String
 }

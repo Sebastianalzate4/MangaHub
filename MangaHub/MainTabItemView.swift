@@ -33,13 +33,11 @@ struct MainTabItemView: View {
                 }
                 .tag(2)
         }
-//        .accentColor(.black)
-        .tint(.orange)
+        .tint(.mangaHubColor)
         .navigationTitle("Mangas")
         .onAppear {
-            UITabBar.appearance().unselectedItemTintColor = .black
-//            UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.black]
-//            UITabBar.appearance().backgroundColor = .orange
+//            UITabBar.appearance().unselectedItemTintColor = .gray
+//            UITabBar.appearance().backgroundColor = .clear
         }
     }
 }

@@ -8,11 +8,30 @@
 import SwiftUI
 
 struct MangaUnavailableView: View {
+    
+    var systemName: String
+    var title: String
+    var subtitle: String
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        
+        VStack {
+            Image(systemName: systemName)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 50, height: 50)
+                .foregroundColor(.mangaHubColor)
+            Text(title)
+                .bold()
+                .font(.title3)
+            Text(subtitle)
+                .foregroundColor(.secondary)
+                .font(.callout)
+                .bold()
+        }
     }
 }
 
 #Preview {
-    MangaUnavailableView()
+    MangaUnavailableView(systemName: "star.slash.fill", title: "This is the Title", subtitle: "And this would be the subtitle")
 }

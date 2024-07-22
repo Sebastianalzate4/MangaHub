@@ -38,11 +38,10 @@ struct MangaScoreView: View {
             .onAppear {
                 progress = true
             }
-//            .offset(x: 1, y: 1)
+        //            .offset(x: 1, y: 1)
     }
 }
 
 #Preview {
     MangaScoreView(manga: .preview)
 }
-

@@ -30,21 +30,10 @@ struct MangasListView: View {
     var body: some View {
         
         NavigationStack(path: $path) {
+            
             Group {
                 if viewmodel.successSearch == false {
-//                    ContentUnavailableView("No Mangas Found", systemImage: "popcorn", description: Text("We couldn't find any manga called \(viewmodel.searchedText)"))
-                    Image(systemName: "popcorn.fill")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 50, height: 50)
-                        .foregroundColor(.orange)
-                    Text("No Mangas Found")
-                        .bold()
-                        .font(.title3)
-                    Text("We couldn't find any manga called \(viewmodel.searchedText)")
-                        .foregroundColor(.secondary)
-                        .font(.callout)
-                        .bold()
+                    MangaUnavailableView(systemName: "popcorn.fill", title: "No Mangas Found", subtitle: "We couldn't find any manga called \(viewmodel.searchedText)")
                 } else {
                     if viewmodel.isList {
                         List(viewmodel.mangas) { manga in
@@ -63,7 +52,8 @@ struct MangasListView: View {
                                         VStack {
                                             MangaPosterView(manga: manga, size: .large)
                                                 .overlay(alignment: .bottomTrailing) {
-                                                    MangaScoreView(manga: manga)
+//                                                    MangaScoreView(manga: manga)
+                                                    CustomGaugeView(value: manga.score, scale: 10, isPercentage: false, size: .small)
                                                 }
                                             Text(manga.title)
                                                 .font(.system(.headline, design: .rounded))
@@ -77,8 +67,7 @@ struct MangasListView: View {
                                                 .clipShape(RoundedRectangle(cornerRadius: 10))
                                                 .overlay(
                                                     RoundedRectangle(cornerRadius: 10)
-                                                        .stroke(Color.black, lineWidth: 0.5)
-                                                )
+                                                        .stroke(Color.black, lineWidth: 0.5))
                                         }
                                     }
                                     .onAppear {

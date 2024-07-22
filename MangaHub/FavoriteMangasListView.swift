@@ -15,19 +15,8 @@ struct FavoriteMangasListView: View {
         NavigationStack {
             Group {
                 if viewmodel.loadedFavouriteMangas.isEmpty {
-
-                    Image(systemName: "heart.fill")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 50, height: 50)
-                        .foregroundColor(.orange)
-                    Text("Add your favorite mangas here")
-                        .bold()
-                        .font(.title3)
-                    Text("Track your progress")
-                        .foregroundColor(.secondary)
-                        .font(.callout)
-                        .bold()
+                    
+                    MangaUnavailableView(systemName: "heart.fill", title: "Add your favorite mangas here", subtitle: "Track your progress")
                         
                 } else {
 

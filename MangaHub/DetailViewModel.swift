@@ -20,6 +20,8 @@ final class DetailViewModel: ObservableObject {
     
     @Published var myError : ErrorsMangaDetail?
     
+    @Published var information : InformationButtons = .description
+    
     private let interactor : PersistenceProtocol
     
     init(interactor: PersistenceProtocol = PersistenceInteractor(), manga: Manga) {
@@ -73,6 +75,25 @@ enum ErrorsMangaDetail : LocalizedError {
             "Error saving manga as favourite"
         case .checkFavourite:
             "Error loading manga data"
+        }
+    }
+}
+
+enum InformationButtons: CaseIterable, Identifiable {
+    case description
+    case authors
+    case details
+
+    var id: Self { self }
+
+    var title: String {
+        switch self {
+        case .description:
+            return "Description"
+        case .authors:
+            return "Authors"
+        case .details:
+            return "Details"
         }
     }
 }

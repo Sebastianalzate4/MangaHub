@@ -39,13 +39,16 @@ struct MangasByAuthorView: View {
         }, message: {
             Text(viewmodel.errorMessage)
         })
-        .navigationTitle(author.firstName)
+        .navigationTitle(author.authorCompleteName)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     path = NavigationPath()
                 } label: {
-                    Text("Back to home")
+                    HStack{
+                        Text("Restart")
+                        Image(systemName: "arrowshape.turn.up.backward.fill")
+                    }
                 }
             }
         }
