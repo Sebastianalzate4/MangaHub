@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PurchasedVolumesView: View {
-
+    
     @ObservedObject var viewmodel: DetailFavoriteViewModel
     
     let flexibleColumns : [GridItem] = [GridItem(.flexible()) , GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
@@ -30,12 +30,13 @@ struct PurchasedVolumesView: View {
                         .stroke(Color.black, lineWidth: 0.5)
                 )
                 .padding()
-                
             
+            // Grid creado a partir del total de volúmenes que tiene el manga.
             if let volumes = viewmodel.manga.volumes {
                 LazyVGrid(columns: flexibleColumns) {
                     ForEach(1...volumes, id: \.self) { volumen in
                         Button {
+                            // Cada uno de los elementos del grid es un botón para poder ser pulsado y realizar la persistencia de ese volúmen en particular o eliminarlo en su defecto en caso de ya haber sido pulsado previamente.
                             viewmodel.persistPurchasedVolumes(volume: volumen)
                         } label: {
                             Text(String(volumen))
@@ -61,8 +62,6 @@ struct PurchasedVolumesView: View {
                 .padding()
             }
         }
-
-
     }
 }
 

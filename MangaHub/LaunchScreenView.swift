@@ -14,13 +14,13 @@ struct LaunchScreenView: View {
         ZStack {
             Color.mangaHubColor
                 .edgesIgnoringSafeArea(.all)
-
+            
             VStack {
                 Image("MangaHubLogo")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 100, height: 100)
-        
+                
                 Text("MangaHub")
                     .font(.title)
                     .foregroundStyle(.black)

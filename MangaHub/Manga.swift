@@ -30,7 +30,9 @@ struct Manga: Codable, Identifiable, Hashable {
     // Nuevas propiedades para mi modelo de presentación:
     var purchasedVolumes: [Int]
     var readingVolume: Int
+    var id2 = UUID()
     
+    // Nuevas propiedades a patir de propiedades existentes para ser usadas en las vistas: 
     var formattedScore: String {
         score.formatted(.number.precision(.fractionLength(1)))
     }
@@ -46,23 +48,16 @@ struct Manga: Codable, Identifiable, Hashable {
     var formattedVolumes: String {
         volumes.map { "\($0)" } ?? "No Volumes Registered"
     }
-    //    var formattedChapters: String {
-    //        if let episodes = chapters {
-    //            return String(episodes)
-    //        }
-    //        return "No Chapters Registered"
-    //    }
+
     var formattedChapters: String {
         chapters.map { "\($0)" } ?? "No Chapters Registered"
     }
     
     var formattedStartDate: String {
-//        startDate?.formatted(date: .abbreviated, time: .omitted) ?? "No Date Registered"
         startDate?.formatted(.dateTime.year()) ?? "No Date Registered"
     }
     
     var formattedEndDate: String {
-//        endDate?.formatted(date: .abbreviated, time: .omitted) ?? "Currently Active"
         endDate?.formatted(.dateTime.year()) ?? "Currently Active"
     }
     

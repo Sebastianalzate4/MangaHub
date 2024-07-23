@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+// Vista que contiene la estructura del Onboarding de la app. La imagén, el título y la descripción. Recibe estos valores a partir de la estructura 'Page'.
+
 struct PageView: View {
     
     var page: Page
@@ -27,7 +29,6 @@ struct PageView: View {
                 .font(.body)
                 .multilineTextAlignment(.center)
                 .padding()
-  
         }
     }
 }

@@ -8,10 +8,8 @@
 import Foundation
 
 struct MangaGeneralDTO: Codable {
-    
     let metadata: Metadata
     let items: [MangaDTO]
-    
 }
 
 struct Metadata: Codable {
@@ -25,7 +23,7 @@ struct MangaDTO: Codable {
     let score: Double
     let sypnosis: String?
     let demographics: [Demographic]
-    let status: String // Revisar posibilidad de convertir más adelante a enum
+    let status: String
     let background: String?
     let startDate: Date?
     let url: String
@@ -41,7 +39,7 @@ struct MangaDTO: Codable {
     let titleJapanese: String?
     let themes: [Theme]
     
-    var mapToModel: Manga {
+    var mapToManga: Manga {
         Manga(
             score: score,
             sypnosis: sypnosis,
@@ -65,7 +63,6 @@ struct MangaDTO: Codable {
             readingVolume: 0
         )
     }
-    
 }
 
 

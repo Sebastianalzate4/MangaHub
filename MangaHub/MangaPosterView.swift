@@ -17,13 +17,37 @@ struct MangaPosterView: View {
                 .resizable()
                 .scaledToFit()
                 .clipShape(RoundedRectangle(cornerRadius: 20))
-                .frame(width: size == .small ? 100 : 200, height: size == .small ? 150 : 200)
+                .frame(width: frameWidth(for: size), height: frameHeight(for: size))
         } placeholder: {
             ProgressView()
                 .controlSize(.extraLarge)
                 .scaledToFit()
                 .clipShape(RoundedRectangle(cornerRadius: 20))
-                .frame(width: size == .small ? 100 : 200, height: size == .small ? 150 : 200)
+                .frame(width: frameWidth(for: size), height: frameHeight(for: size))
+        }
+    }
+    
+    // Funciones para determinar el tamaño/frame de la imagen: 
+    
+    private func frameWidth(for size: PosterSize) -> CGFloat {
+        switch size {
+        case .small:
+            return 100
+        case .medium:
+            return 200
+        case .large:
+            return 350
+        }
+    }
+    
+    private func frameHeight(for size: PosterSize) -> CGFloat {
+        switch size {
+        case .small:
+            return 150
+        case .medium:
+            return 200
+        case .large:
+            return 350
         }
     }
 }
@@ -34,5 +58,6 @@ struct MangaPosterView: View {
 
 enum PosterSize {
     case small
+    case medium
     case large
 }

@@ -10,8 +10,8 @@ import SwiftUI
 struct MangasListView: View {
     
     @StateObject var viewmodel = ListViewModel()
-    
-    @State private var path = NavigationPath()
+    @State private var path = NavigationPath() // path para poder volver a esta vista
+    let deviceType = UIDevice.current.userInterfaceIdiom // Dependiendo del dispositivo seleccionado, se realizarán ajustes como el número de columnas en el grid cuando el usuario quiera mostrar los mangas en este formato.
     
     let gridMangas: [GridItem] = [
         GridItem(.flexible()),
@@ -24,36 +24,37 @@ struct MangasListView: View {
         GridItem(.flexible())
     ]
     
-    let deviceType = UIDevice.current.userInterfaceIdiom
-    
     
     var body: some View {
         
         NavigationStack(path: $path) {
             
             Group {
-                if viewmodel.successSearch == false {
+                // Si la búsqueda de un manga en red es fallida, mostramos la vista 'MangaUnavailableView'
+                if viewmodel.wasSearchSuccessful == false {
                     MangaUnavailableView(systemName: "popcorn.fill", title: "No Mangas Found", subtitle: "We couldn't find any manga called \(viewmodel.searchedText)")
                 } else {
+                    // Por el contrario, si es exitosa, mostramos la Lista con los resultados, o simplemente todos los mangas del endpoint en formato lista.
                     if viewmodel.isList {
-                        List(viewmodel.mangas) { manga in
+                        List(viewmodel.mangas, id: \.self) { manga in
                             NavigationLink(value: manga) {
                                 MangaCellView(manga: manga)
                                     .onAppear {
-                                        viewmodel.isLastItem(manga: manga)
+                                        viewmodel.isLastManga(manga: manga)
                                     }
                             }
+                       
                         }
                     } else {
                         ScrollView {
+                            // Aquí mostramos el listado en formato Grid y hacemos un ajuste de la cantidad de columnas si estamos en un iPad.
                             LazyVGrid(columns: deviceType == .pad ? gridMangasiPad : gridMangas, spacing: 20) {
-                                ForEach(viewmodel.mangas) { manga in
+                                ForEach(viewmodel.mangas, id: \.self) { manga in
                                     NavigationLink(value: manga) {
                                         VStack {
-                                            MangaPosterView(manga: manga, size: .large)
+                                            MangaPosterView(manga: manga, size: .medium)
                                                 .overlay(alignment: .bottomTrailing) {
-//                                                    MangaScoreView(manga: manga)
-                                                    CustomGaugeView(value: manga.score, scale: 10, isPercentage: false, size: .small)
+                                                    CustomGaugeView(isPercentage: false, value: manga.score, scale: 10, size: .small)
                                                 }
                                             Text(manga.title)
                                                 .font(.system(.headline, design: .rounded))
@@ -65,13 +66,14 @@ struct MangasListView: View {
                                                 .frame(height: 30)
                                                 .background(Color.mangaHubColor)
                                                 .clipShape(RoundedRectangle(cornerRadius: 10))
-                                                .overlay(
+                                                .overlay {
                                                     RoundedRectangle(cornerRadius: 10)
-                                                        .stroke(Color.black, lineWidth: 0.5))
+                                                        .stroke(Color.black, lineWidth: 0.5)
+                                                }
                                         }
                                     }
                                     .onAppear {
-                                        viewmodel.isLastItem(manga: manga)
+                                        viewmodel.isLastManga(manga: manga)
                                     }
                                 }
                             }
@@ -89,12 +91,12 @@ struct MangasListView: View {
             .onChange(of: viewmodel.searchedText) {
                 viewmodel.onChangeText()
             }
-            .alert("Something went wrong", isPresented: $viewmodel.showAlert, presenting: viewmodel.myError) { error in
+            .alert("Something went wrong", isPresented: $viewmodel.showAlert, presenting: viewmodel.mangasListError) { error in
                 Button("Try again") {
                     switch error {
-                    case .allMangasError: viewmodel.fetchAllMangas()
-                    case .bestMangasError: viewmodel.fetchBestMangas()
-                    case .searchMangasError: viewmodel.search(text: viewmodel.searchedText)
+                    case .allMangasError: viewmodel.AllMangas()
+                    case .bestMangasError: viewmodel.BestMangas()
+                    case .searchMangasError: viewmodel.searchManga(text: viewmodel.searchedText)
                     }
                 }
                 
@@ -114,10 +116,10 @@ struct MangasListView: View {
                 Text(viewmodel.errorMessage)
             }
             .searchable(text: $viewmodel.searchedText)
-//            .refreshable {
-//                switch viewmodel.
-//                viewmodel.fetchAllMangas()
-//            }
+            //            .refreshable {
+            //                switch viewmodel.
+            //                viewmodel.AllMangas()
+            //            }
             .navigationTitle("Mangas")
             .toolbar {
                 ToolbarItemGroup(placement: .secondaryAction) {
@@ -146,10 +148,5 @@ struct MangasListView: View {
 #Preview("PREVIEW DATA") {
     MangasListView(viewmodel: ListViewModel(interactor: .preview))
 }
-
-
-//#Preview("PRODUCTION DATA") {
-//    MangasListView()
-//}
 
 

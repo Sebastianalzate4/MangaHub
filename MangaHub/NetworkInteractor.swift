@@ -8,81 +8,77 @@
 import Foundation
 
 protocol NetworkProtocol {
-
-    func getAllMangas() async throws -> [Manga]
-    func getAllMangasPaginated(page: Int, mangasPerPage: Int) async throws -> [Manga]
-    func getBestMangas(page: Int, mangasPerPage: Int) async throws -> [Manga]
     
+    func fetchAllMangas() async throws -> [Manga]
+    func fetchAllMangasPaginated(page: Int, mangasPerPage: Int) async throws -> [Manga]
+    func fetchBestMangas(page: Int, mangasPerPage: Int) async throws -> [Manga]
     
-    func getMangaByGenre(genre: String, page: Int) async throws -> [Manga]
-    func getMangaByTheme(theme: String, page: Int) async throws -> [Manga]
-    func getMangaByDemographic(demographic: String, page: Int) async throws -> [Manga]
-    func getMangaByAuthorPaginated(idAuthor: String, page: Int, mangasPerPage: Int) async throws -> [Manga]
-
-    func getGenres() async throws -> [String]
-    func getDemographics() async throws -> [String]
-    func getThemes() async throws -> [String]
-    func getAuthors() async throws -> [Author]
+    func fetchMangasByGenre(genre: String, page: Int) async throws -> [Manga]
+    func fetchMangasByTheme(theme: String, page: Int) async throws -> [Manga]
+    func fetchMangasByDemographic(demographic: String, page: Int) async throws -> [Manga]
+    func fetchMangasByAuthor(idAuthor: String, page: Int, mangasPerPage: Int) async throws -> [Manga]
     
+    func fetchGenres() async throws -> [String]
+    func fetchDemographics() async throws -> [String]
+    func fetchThemes() async throws -> [String]
+    func fetchAuthors() async throws -> [Author]
     
-    func searchMangaContains(text: String, page: Int) async throws -> [Manga]
-    
+    func fetchSearchedMangas(text: String, page: Int) async throws -> [Manga]
 }
 
 
 struct NetworkInteractor: NetworkProtocol {
-
-    func getAllMangas() async throws -> [Manga] {
-        return try await getDataGeneric(request: .allMangasURL, type: MangaGeneralDTO.self).items.map(\.mapToModel)
+    
+    // Cada una de estas funciones hace uso de la función genérica para el llamado a red con su respectivo endpoint.
+    
+    func fetchAllMangas() async throws -> [Manga] {
+        return try await fetchDataGeneric(url: .allMangasURL, type: MangaGeneralDTO.self).items.map(\.mapToManga)
     }
     
-    func getBestMangas(page: Int = 1, mangasPerPage: Int = 10) async throws -> [Manga] {
-        return try await getDataGeneric(request: .bestMangasURL(page: page), type: MangaGeneralDTO.self).items.map(\.mapToModel)
+    func fetchBestMangas(page: Int = 1, mangasPerPage: Int = 10) async throws -> [Manga] {
+        return try await fetchDataGeneric(url: .getBestMangasURL(page: page), type: MangaGeneralDTO.self).items.map(\.mapToManga)
     }
     
-    func getAllMangasPaginated(page: Int = 1, mangasPerPage: Int = 10) async throws -> [Manga] {
-        return try await getDataGeneric(request: .allMangasPaginatedURL(page: page, mangasPerPage: mangasPerPage), type: MangaGeneralDTO.self).items.map(\.mapToModel)
-    }
-    
-    
-    func getMangaByGenre(genre: String, page: Int) async throws -> [Manga] {
-        return try await getDataGeneric(request: .mangaByGenreURL(genre: genre, page: page), type: MangaGeneralDTO.self).items.map(\.mapToModel)
-    }
-    
-    func getMangaByTheme(theme: String, page: Int) async throws -> [Manga] {
-        return try await getDataGeneric(request: .mangaByThemeURL(theme: theme, page: page), type: MangaGeneralDTO.self).items.map(\.mapToModel)
-    }
-    
-    func getMangaByDemographic(demographic: String, page: Int) async throws -> [Manga] {
-        return try await getDataGeneric(request: .mangaByDemographicsURL(demographic: demographic, page: page), type: MangaGeneralDTO.self).items.map(\.mapToModel)
-    }
-    
-    func getMangaByAuthorPaginated(idAuthor: String, page: Int = 1, mangasPerPage: Int = 10) async throws -> [Manga] {
-        return try await getDataGeneric(request: .mangaByAuthorURL(authorID: idAuthor, page: page, mangasPerPage: mangasPerPage), type: MangaGeneralDTO.self).items.map(\.mapToModel)
+    func fetchAllMangasPaginated(page: Int = 1, mangasPerPage: Int = 10) async throws -> [Manga] {
+        return try await fetchDataGeneric(url: .getAllMangasPaginatedURL(page: page, mangasPerPage: mangasPerPage), type: MangaGeneralDTO.self).items.map(\.mapToManga)
     }
     
     
-    
-    
-    func getGenres() async throws -> [String] {
-        return try await getDataGeneric(request: .genresURL, type: [String].self)
+    func fetchMangasByGenre(genre: String, page: Int) async throws -> [Manga] {
+        return try await fetchDataGeneric(url: .getMangaByGenreURL(genre: genre, page: page), type: MangaGeneralDTO.self).items.map(\.mapToManga)
     }
     
-    func getDemographics() async throws -> [String] {
-        return try await getDataGeneric(request: .demographicsURL, type: [String].self)
+    func fetchMangasByTheme(theme: String, page: Int) async throws -> [Manga] {
+        return try await fetchDataGeneric(url: .getMangaByThemeURL(theme: theme, page: page), type: MangaGeneralDTO.self).items.map(\.mapToManga)
     }
     
-    func getThemes() async throws -> [String] {
-        return try await getDataGeneric(request: .themesURL, type: [String].self)
+    func fetchMangasByDemographic(demographic: String, page: Int) async throws -> [Manga] {
+        return try await fetchDataGeneric(url: .getMangaByDemographicsURL(demographic: demographic, page: page), type: MangaGeneralDTO.self).items.map(\.mapToManga)
     }
     
-    func getAuthors() async throws -> [Author] {
-        return try await getDataGeneric(request: .authorsURL, type: [Author].self)
+    func fetchMangasByAuthor(idAuthor: String, page: Int = 1, mangasPerPage: Int = 10) async throws -> [Manga] {
+        return try await fetchDataGeneric(url: .getMangaByAuthorURL(authorID: idAuthor, page: page, mangasPerPage: mangasPerPage), type: MangaGeneralDTO.self).items.map(\.mapToManga)
     }
     
     
+    func fetchGenres() async throws -> [String] {
+        return try await fetchDataGeneric(url: .genresURL, type: [String].self)
+    }
     
-    func searchMangaContains(text: String, page: Int) async throws -> [Manga] {
-        return try await getDataGeneric(request: .searchContainsURL(text: text, page: page), type: MangaGeneralDTO.self).items.map(\.mapToModel)
+    func fetchDemographics() async throws -> [String] {
+        return try await fetchDataGeneric(url: .demographicsURL, type: [String].self)
+    }
+    
+    func fetchThemes() async throws -> [String] {
+        return try await fetchDataGeneric(url: .themesURL, type: [String].self)
+    }
+    
+    func fetchAuthors() async throws -> [Author] {
+        return try await fetchDataGeneric(url: .authorsURL, type: [Author].self)
+    }
+    
+    
+    func fetchSearchedMangas(text: String, page: Int) async throws -> [Manga] {
+        return try await fetchDataGeneric(url: .getSearchContainsURL(text: text, page: page), type: MangaGeneralDTO.self).items.map(\.mapToManga)
     }
 }

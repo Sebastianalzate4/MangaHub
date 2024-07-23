@@ -10,19 +10,21 @@ import Foundation
 let urlDocumentFolder = URL.documentsDirectory.appending(path: "MyMangas.json")
 
 protocol PersistenceProtocol {
-    func guardar(array: [Manga]) throws
-    func cargar() throws -> [Manga]
+    func saveMangas(array: [Manga]) throws
+    func loadMangas() throws -> [Manga]
 }
 
 
 struct PersistenceInteractor : PersistenceProtocol {
     
-    func guardar(array: [Manga]) throws {
+    // Función para guardar en local los mangas marcados como favoritos.
+    func saveMangas(array: [Manga]) throws {
         let encondedData = try JSONEncoder().encode(array)
         try encondedData.write(to: urlDocumentFolder, options: .atomic)
     }
     
-    func cargar() throws -> [Manga] {
+    // Función para cargar los mangas desde el sandbox de la app.
+    func loadMangas() throws -> [Manga] {
         if FileManager.default.fileExists(atPath: urlDocumentFolder.path()) {
             let data = try Data(contentsOf: urlDocumentFolder)
             let decodedMangas = try JSONDecoder().decode([Manga].self, from: data)

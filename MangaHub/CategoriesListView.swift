@@ -14,32 +14,33 @@ struct CategoriesListView: View {
     
     var body: some View {
         NavigationStack(path: $pathCategories) {
+            // Botones para seleccionar una categoría.
             VStack {
                 ScrollView(.horizontal) {
                     HStack {
                         Button {
-                            viewmodel.fetchGenres()
-                            viewmodel.cType = .genres
+                            viewmodel.Genres()
+                            viewmodel.categoryType = .genres
                         } label: {
                             Text("Genres")
                         }
-                        .mangaHubButtonCategories(isSelected: viewmodel.cType == .genres)
+                        .mangaHubButtonCategories(isSelected: viewmodel.categoryType == .genres)
                         
                         Button {
-                            viewmodel.fetchDemographics()
-                            viewmodel.cType = .demographics
+                            viewmodel.Demographics()
+                            viewmodel.categoryType = .demographics
                         } label: {
                             Text("Demographics")
                         }
-                        .mangaHubButtonCategories(isSelected: viewmodel.cType == .demographics)
+                        .mangaHubButtonCategories(isSelected: viewmodel.categoryType == .demographics)
                         
                         Button {
-                            viewmodel.fetchThemes()
-                            viewmodel.cType = .themes
+                            viewmodel.Themes()
+                            viewmodel.categoryType = .themes
                         } label: {
                             Text("Themes")
                         }
-                        .mangaHubButtonCategories(isSelected: viewmodel.cType == .themes)
+                        .mangaHubButtonCategories(isSelected: viewmodel.categoryType == .themes)
                     }
                     .padding(.horizontal)
                 }
@@ -47,15 +48,17 @@ struct CategoriesListView: View {
                 Spacer()
                 
                 Group {
-                    if viewmodel.categories.isEmpty {
+                    // Mientras no haya ninguna categoría seleccionada y el array de subcategorías esté vacío, mostraremos la 'MangaUnavailableView'
+                    if viewmodel.subcategories.isEmpty {
                         VStack {
-                            MangaUnavailableView(systemName: "arrowshape.up.circle.fill", title: "Select a Category", subtitle: "Display a list of mangas by a specific category")
+                            MangaUnavailableView(systemName: "arrowshape.up.circle.fill", title: "Select a Category", subtitle: "Display a list of mangas by a specific subcategory")
                         }
                         .padding()
                     } else {
-                        List(viewmodel.categories, id: \.self) { category in
-                            NavigationLink(value: category) {
-                                Text(category)
+                        // Listado de subcategorías de acuerdo a la categoría seleccionada.
+                        List(viewmodel.subcategories.sorted(), id: \.self) { subcategory in
+                            NavigationLink(value: subcategory) {
+                                Text(subcategory)
                             }
                             .listRowBackground(Color.clear)
                         }
@@ -66,8 +69,8 @@ struct CategoriesListView: View {
                 Spacer()
             }
             .navigationTitle("Categories")
-            .navigationDestination(for: String.self) { category in
-                MangasByCategoryView(pathCategories: $pathCategories, category: category, type: viewmodel.cType ?? .genres)
+            .navigationDestination(for: String.self) { subcategory in
+                MangasByCategoryView(pathCategories: $pathCategories, subcategory: subcategory, category: viewmodel.categoryType ?? .genres)
             }
             .navigationDestination(for: Manga.self) { manga in
                 MangaDetailView(viewmodel: DetailViewModel(manga: manga))
@@ -75,12 +78,12 @@ struct CategoriesListView: View {
             .navigationDestination(for: Author.self) { author in
                 MangasByAuthorView(path: $pathCategories, author: author)
             }
-            .alert("Something went wrong", isPresented: $viewmodel.showAlert, presenting: viewmodel.myError) { error in
+            .alert("Something went wrong", isPresented: $viewmodel.showAlert, presenting: viewmodel.categoriesListError) { error in
                 Button {
                     switch error {
-                    case .fetchGenres : viewmodel.fetchGenres()
-                    case .fetchThemes : viewmodel.fetchThemes()
-                    case .fetchDemographics : viewmodel.fetchDemographics()
+                    case .fetchGenres : viewmodel.Genres()
+                    case .fetchThemes : viewmodel.Themes()
+                    case .fetchDemographics : viewmodel.Demographics()
                     }
                 } label: {
                     Text("Try Again")

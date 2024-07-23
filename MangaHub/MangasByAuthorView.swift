@@ -11,25 +11,25 @@ struct MangasByAuthorView: View {
     
     @StateObject var viewmodel = ListViewModel()
     @Binding var path: NavigationPath
-    
     var author: Author
     
     var body: some View {
         
+        // Lista de Mangas por Autor, la cual recibe el autor desde la 'MangaDetailView'.
         List(viewmodel.mangasByAuthor) { manga in
             NavigationLink(value: manga) {
                 MangaCellView(manga: manga)
                     .onAppear {
-                        viewmodel.isLastItemAuthor(manga: manga, idAuthor: author.id)
+                        viewmodel.isLastMangaByAuthor(manga: manga, idAuthor: author.id)
                     }
             }
         }
         .onAppear {
-            viewmodel.fetchMangasByAuthor(idAuthor: author.id)
+            viewmodel.MangasByAuthor(idAuthor: author.id)
         }
         .alert("Something went wrong", isPresented: $viewmodel.showAlert, actions: {
             Button("Try again") {
-                viewmodel.fetchMangasByAuthor(idAuthor: author.id)
+                viewmodel.MangasByAuthor(idAuthor: author.id)
             }
             Button {
                 viewmodel.showAlert = false

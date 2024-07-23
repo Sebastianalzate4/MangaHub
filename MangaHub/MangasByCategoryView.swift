@@ -9,32 +9,35 @@ import SwiftUI
 
 struct MangasByCategoryView: View {
     
+    // Esta vista va a mostrar un listado de mangas dependiendo de la categoría y subcategoría seleccionada previamente desde la 'CategoriesListView'.
+    
     @StateObject var viewmodel = CategoriesViewModel()
     @Binding var pathCategories: NavigationPath
-    var category: String
-    var type: categoryType
+    var subcategory: String
+    var category: categoryType
     
     var body: some View {
         
-        List(viewmodel.mangasByCategory) { manga in
+        List(viewmodel.mangasByCategory, id: \.self) { manga in
             NavigationLink(value: manga) {
                 MangaCellView(manga: manga)
                     .onAppear {
-                        viewmodel.isLastItemCategories(manga: manga, category: category)
+                        viewmodel.isLastMangaByCategory(manga: manga, subcategory: subcategory)
                     }
             }
+            
         }
         .onAppear {
-            viewmodel.cType = type
-            viewmodel.categorySelected(category: category)
+            viewmodel.categoryType = category
+            viewmodel.mangasByCategoryTypeSelected(subcategory: subcategory)
         }
-        .navigationTitle(category)
-        .alert("Something went wrong", isPresented: $viewmodel.showAlert, presenting: viewmodel.myErrorSpecific, actions: { error in
+        .navigationTitle(subcategory)
+        .alert("Something went wrong", isPresented: $viewmodel.showAlert, presenting: viewmodel.mangasByCategoryError, actions: { error in
             Button("Try again") {
                 switch error {
-                case .fetchMangasByGenre : viewmodel.fetchMangasByGenre(genre: category)
-                case .fetchMangasByTheme : viewmodel.fetchMangasByTheme(theme: category)
-                case .fetchMangasByDemographic : viewmodel.fetchMangasByDemographic(demographic: category)
+                case .fetchMangasByGenre : viewmodel.MangasByGenre(genre: subcategory)
+                case .fetchMangasByTheme : viewmodel.MangasByTheme(theme: subcategory)
+                case .fetchMangasByDemographic : viewmodel.MangasByDemographic(demographic: subcategory)
                 }
             }
             Button {
@@ -63,7 +66,7 @@ struct MangasByCategoryView: View {
 
 #Preview {
     NavigationStack {
-        MangasByCategoryView(pathCategories: .constant(NavigationPath()),category: "Action", type: .genres)
+        MangasByCategoryView(pathCategories: .constant(NavigationPath()),subcategory: "Action", category: .genres)
     }
 }
 

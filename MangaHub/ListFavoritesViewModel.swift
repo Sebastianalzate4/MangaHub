@@ -9,14 +9,10 @@ import Foundation
 
 final class ListFavoritesViewModel : ObservableObject {
     
-    @Published var loadedFavouriteMangas : [Manga] = []
-    
+    @Published var loadedFavoriteMangas : [Manga] = []
     @Published var containsFavourites = false
-    
-    @Published var searchFavManga = ""
-    
+    @Published var searchedManga = ""
     @Published var errorMessage: String = ""
-    
     @Published var showAlert: Bool = false
     
     private let interactor : PersistenceProtocol
@@ -25,39 +21,36 @@ final class ListFavoritesViewModel : ObservableObject {
         self.interactor = interactor
     }
     
-    deinit {
-        print("Lista Favoritos Cerrada")
-    }
-    
+    // Función que carga los favoritos desde el sandbox y luego los asigna al array 'loaderFavoriteMangas'
     func showFavourites() {
         do {
-            loadedFavouriteMangas = try interactor.cargar()
+            loadedFavoriteMangas = try interactor.loadMangas()
         } catch {
             errorMessage = "Failed to show the list of mangas. Try closing the app and reopen it again."
             showAlert = true
         }
     }
     
+    // Función que elimina los mangas de la lista de favoritos y persiste el cambio.
     func deleteManga(indexSet: IndexSet) {
-        loadedFavouriteMangas.remove(atOffsets: indexSet)
+        loadedFavoriteMangas.remove(atOffsets: indexSet)
         do {
-            try interactor.guardar(array: loadedFavouriteMangas)
+            try interactor.saveMangas(array: loadedFavoriteMangas)
         } catch {
             errorMessage = "Failed to save changes. Try closing the app and reopen it again."
             showAlert = true
         }
     }
-
     
+    // Búsqueda de mangas en local.
     var filteredMangas: [Manga] {
-        loadedFavouriteMangas
+        loadedFavoriteMangas
             .filter {
-                guard !searchFavManga.isEmpty else { return true }
-                let searchText = searchFavManga.lowercased()
-                return $0.title.lowercased().contains(searchText)
+                guard !searchedManga.isEmpty else { return true }
+                let searchedText = searchedManga.lowercased()
+                return $0.title.lowercased().contains(searchedText)
             }
     }
-    
 }
 
 

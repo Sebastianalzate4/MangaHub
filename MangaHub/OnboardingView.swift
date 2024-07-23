@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+// Vista que contiene el TabView, el cual recibe las vistas a partir de la 'PageView'. Contiene un 'selectedIndex' para identificar la página en la que nos encontramos y así realizar la lógica de los botones. Además, desde aquí establecemos el valor de 'isFirstLaunch' a 'False' y queda guardado gracias al property wrapper '@AppStorage'.
+
 struct OnboardingView: View {
     
     @State private var selectedIndex = 0
@@ -22,6 +24,7 @@ struct OnboardingView: View {
                 
                 TabView(selection: $selectedIndex) {
                     ForEach(pages) { page in
+                        
                         VStack {
                             
                             PageView(page: page)
@@ -41,14 +44,8 @@ struct OnboardingView: View {
                                             .bold()
                                             .background(Color.black)
                                             .clipShape(RoundedRectangle(cornerRadius: 10))
-                                            .overlay(
-                                                RoundedRectangle(cornerRadius: 10)
-                                                    .stroke(Color.black, lineWidth: 0.5)
-                                            )
                                             .padding(.horizontal)
-                                           
                                     }
-                                    
                                 }
                                 
                                 Button {
@@ -67,10 +64,6 @@ struct OnboardingView: View {
                                             .bold()
                                             .background(Color.mangaHubColor)
                                             .clipShape(RoundedRectangle(cornerRadius: 10))
-                                            .overlay(
-                                                RoundedRectangle(cornerRadius: 10)
-                                                    .stroke(Color.black, lineWidth: 0.5)
-                                            )
                                             .padding(.horizontal)
                                     } else {
                                         Text("Next")
@@ -81,15 +74,9 @@ struct OnboardingView: View {
                                             .bold()
                                             .background(Color.mangaHubColor)
                                             .clipShape(RoundedRectangle(cornerRadius: 10))
-                                            .overlay(
-                                                RoundedRectangle(cornerRadius: 10)
-                                                    .stroke(Color.black, lineWidth: 0.5)
-                                            )
                                             .padding(.horizontal)
-                                            
                                     }
                                 }
-                                
                             }
                             .offset(y: 50)
                             
@@ -112,8 +99,6 @@ struct OnboardingView: View {
                 .animation(.easeInOut, value: selectedIndex)
                 .tabViewStyle(.page)
                 .onAppear {
-                    UIPageControl.appearance().currentPageIndicatorTintColor = .orange
-                    UIPageControl.appearance().pageIndicatorTintColor = .secondaryLabel
                     UIPageControl.appearance().isHidden = true
                 }
             }

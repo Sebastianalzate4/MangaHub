@@ -7,6 +7,8 @@
 
 import Foundation
 
+// Estructura que contiene los datos necesarios para el Onboarding de la app.
+
 struct Page: Identifiable {
     var id = UUID()
     var tag: Int

@@ -10,13 +10,13 @@ import SwiftUI
 struct FilterDetailView: View {
     
     @ObservedObject var viewmodel: DetailViewModel
-    @State private var selection: InformationButtons = .description
-    @Namespace private var namespace
+    @State private var selection: InformationFilteringButtons = .description
     @State var isExpanded: Bool = false
-    
+    @Namespace private var namespace // Property Wraper para la animación de la información seleccionada.
+   
     var body: some View {
         HStack(alignment: .top, spacing: 32) {
-            ForEach(InformationButtons.allCases) { option in
+            ForEach(InformationFilteringButtons.allCases) { option in
                 VStack(spacing: 8) {
                     Text(option.title)
                         .frame(maxWidth: .infinity)
@@ -39,9 +39,11 @@ struct FilterDetailView: View {
         }
         .animation(.smooth, value: selection)
         
+        // Creación de un switch para que mediante el 'selection' el usuario estipule qué tipo de información quiere ver:
         switch selection {
             
-        case .description:
+        case .description: // Muestra la sinopsis del manga.
+            
             Text(viewmodel.manga.sypnosis ?? "")
                 .multilineTextAlignment(.leading)
                 .lineLimit(isExpanded ? nil : 5)
@@ -62,7 +64,7 @@ struct FilterDetailView: View {
             .clipShape(RoundedRectangle(cornerRadius: 10))
             
             
-        case .authors:
+        case .authors: // Muestra el listado de autores de ese manga en particular.
             
             Text("Explore a curated list of manga created by the authors behind **\(viewmodel.manga.title)**. Click on an author's name to discover their complete works.")
                 .padding()
@@ -76,7 +78,6 @@ struct FilterDetailView: View {
                                 Text(author.authorCompleteName)
                                 Image(systemName: "chevron.right")
                             }
-                            
                             .padding()
                             .font(.system(.headline, design: .rounded))
                             .bold()
@@ -85,21 +86,19 @@ struct FilterDetailView: View {
                             .frame(maxWidth: .infinity)
                             .background(Color.mangaHubColor)
                             .clipShape(RoundedRectangle(cornerRadius: 10))
-                            .overlay(
+                            .overlay{
                                 RoundedRectangle(cornerRadius: 10)
                                     .stroke(Color.black, lineWidth: 0.5)
-                            )
+                            }
                         }
                     }
                 }
                 .padding(.init(top: 10, leading: 20, bottom: 30, trailing: 40))
             }
             
-        case .details:
-            
-            
+        case .details: // Muestra la vista que contiene el Form con todos los datos del manga.
+
             DetailsSectionView(manga: viewmodel.manga)
-            
         }
     }
 }

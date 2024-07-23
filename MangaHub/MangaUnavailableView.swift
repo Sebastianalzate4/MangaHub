@@ -28,6 +28,7 @@ struct MangaUnavailableView: View {
                 .foregroundColor(.secondary)
                 .font(.callout)
                 .bold()
+                .multilineTextAlignment(.center)
         }
     }
 }

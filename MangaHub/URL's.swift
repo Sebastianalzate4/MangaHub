@@ -8,38 +8,34 @@
 import Foundation
 
 // URL bases:
-let URLBaseList: URL = URL(string: "https://mymanga-acacademy-5607149ebe3d.herokuapp.com/list")!
-let URLBaseSearch: URL = URL(string: "https://mymanga-acacademy-5607149ebe3d.herokuapp.com/search")!
-let URLBaseUsers: URL = URL(string: "https://mymanga-acacademy-5607149ebe3d.herokuapp.com/users")!
-let URLBaseCollection: URL = URL(string: "https://mymanga-acacademy-5607149ebe3d.herokuapp.com/collection")!
+let listBaseURL: URL = URL(string: "https://mymanga-acacademy-5607149ebe3d.herokuapp.com/list")!
+let searchBaseURL: URL = URL(string: "https://mymanga-acacademy-5607149ebe3d.herokuapp.com/search")!
 
-
+// Endpoints:
 extension URL {
-
-    static let allMangasURL: URL = URLBaseList.appending(path: "mangas")
-    static let bestMangasURL: URL = URLBaseList.appending(path: "bestMangas")
     
-    static let genresURL: URL = URLBaseList.appending(path: "genres")
-    static let authorsURL: URL = URLBaseList.appending(path: "authors")
-    static let demographicsURL: URL = URLBaseList.appending(path: "demographics")
-    static let themesURL: URL = URLBaseList.appending(path: "themes")
+    static let allMangasURL: URL = listBaseURL.appending(path: "mangas")
+    static let bestMangasURL: URL = listBaseURL.appending(path: "bestMangas")
+    static let genresURL: URL = listBaseURL.appending(path: "genres")
+    static let authorsURL: URL = listBaseURL.appending(path: "authors")
+    static let demographicsURL: URL = listBaseURL.appending(path: "demographics")
+    static let themesURL: URL = listBaseURL.appending(path: "themes")
     
-    
-    static func searchContainsURL(text: String, page: Int) -> URL {
-        let url = URLBaseSearch.appending(path: "mangasContains").appending(path: text)
+    static func getSearchContainsURL(text: String, page: Int) -> URL {
+        let url = searchBaseURL.appending(path: "mangasContains").appending(path: text)
             .appending(queryItems: [.getPage(pageNumber: page)])
         print(url)
         return url
     }
     
-    static func allMangasPaginatedURL(page: Int, mangasPerPage: Int = 10) -> URL {
+    static func getAllMangasPaginatedURL(page: Int, mangasPerPage: Int = 10) -> URL {
         let url = allMangasURL
             .appending(queryItems: [.getPage(pageNumber: page)])
         print(url)
         return url
     }
     
-    static func bestMangasURL(page: Int, mangasPerPage: Int = 10) -> URL {
+    static func getBestMangasURL(page: Int, mangasPerPage: Int = 10) -> URL {
         let url = bestMangasURL
             .appending(queryItems: [.getPage(pageNumber: page)])
         print(url)
@@ -47,32 +43,32 @@ extension URL {
     }
     
     
-    static func mangaByAuthorURL(authorID: String, page: Int, mangasPerPage: Int = 10) -> URL {
-        let url = URLBaseList.appending(path: "mangaByAuthor/\(authorID)")
+    static func getMangaByAuthorURL(authorID: String, page: Int, mangasPerPage: Int = 10) -> URL {
+        let url = listBaseURL.appending(path: "mangaByAuthor/\(authorID)")
             .appending(queryItems: [.getPage(pageNumber: page)])
         print(url)
         return url
     }
     
     
-    static func mangaByGenreURL(genre: String, page: Int) -> URL {
-        let url = URLBaseList.appending(path: "mangaByGenre/\(genre)")
-            .appending(queryItems: [.getPage(pageNumber: page)])
-        print(url)
-        return url
-    }
-    
-   
-    static func mangaByDemographicsURL(demographic: String, page: Int) -> URL {
-        let url = URLBaseList.appending(path: "mangaByDemographic/\(demographic)")
+    static func getMangaByGenreURL(genre: String, page: Int) -> URL {
+        let url = listBaseURL.appending(path: "mangaByGenre/\(genre)")
             .appending(queryItems: [.getPage(pageNumber: page)])
         print(url)
         return url
     }
     
     
-    static func mangaByThemeURL(theme: String, page: Int) -> URL {
-       let url = URLBaseList.appending(path: "mangaByTheme/\(theme)")
+    static func getMangaByDemographicsURL(demographic: String, page: Int) -> URL {
+        let url = listBaseURL.appending(path: "mangaByDemographic/\(demographic)")
+            .appending(queryItems: [.getPage(pageNumber: page)])
+        print(url)
+        return url
+    }
+    
+    
+    static func getMangaByThemeURL(theme: String, page: Int) -> URL {
+        let url = listBaseURL.appending(path: "mangaByTheme/\(theme)")
             .appending(queryItems: [.getPage(pageNumber: page)])
         print(url)
         return url

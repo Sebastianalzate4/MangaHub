@@ -7,26 +7,19 @@
 
 import Foundation
 
+// Llamado a Red para todos los endpoints:
 
-func getDataGeneric<TYPE>(request: URL, type: TYPE.Type) async throws -> TYPE where TYPE: Codable {
-  
-        let (data, response) = try await URLSession.shared.data(from: request)
-        
-        guard let responseHTTP = response as? HTTPURLResponse else {
-            print("fallo la response de la generica")
-            throw NetworkError.noHTTP
-        }
-        
-        guard responseHTTP.statusCode == 200 else {
-            print("fallo el status code de la generica")
-            throw NetworkError.statuscode(responseHTTP.statusCode)
-        }
-        
-        let decoder = JSONDecoder()
-        
-        decoder.dateDecodingStrategy = .formatted(.customDateFormatter)
-        
-        return try decoder.decode(type, from: data)
+func fetchDataGeneric<TYPE>(url: URL, type: TYPE.Type) async throws -> TYPE where TYPE: Codable {
+    
+    let (data, response) = try await URLSession.shared.data(from: url)
+    
+    guard let responseHTTP = response as? HTTPURLResponse else { throw NetworkError.noHTTP }
+    
+    guard responseHTTP.statusCode == 200 else { throw NetworkError.statuscode(responseHTTP.statusCode) }
+    
+    let decoder = JSONDecoder()
+    decoder.dateDecodingStrategy = .formatted(.customDateFormatter)
+    return try decoder.decode(type, from: data)
 }
 
 enum NetworkError: Error {
@@ -36,9 +29,9 @@ enum NetworkError: Error {
     var errorDescription: String {
         switch self {
         case .noHTTP:
-            "No HTTP"
+            "The response did not contain valid HTTP information."
         case .statuscode(let code):
-            "NOT FOUND \(code)"
+            "Request failed with status code \(code)."
         }
     }
 }

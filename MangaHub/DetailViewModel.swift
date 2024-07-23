@@ -11,16 +11,11 @@ import Foundation
 final class DetailViewModel: ObservableObject {
     
     var manga: Manga
-    
     var savedFavouriteMangas : [Manga] = []
     
     @Published var isDisable = false
-    
     @Published var showAlert: Bool = false
-    
-    @Published var myError : ErrorsMangaDetail?
-    
-    @Published var information : InformationButtons = .description
+    @Published var mangaDetailError : MangaDetailErrors?
     
     private let interactor : PersistenceProtocol
     
@@ -30,27 +25,26 @@ final class DetailViewModel: ObservableObject {
         try? loadData()
     }
     
-    deinit {
-        print("Correctamente cerrado")
-    }
-    
+    // Función que carga los mangas que se encuentren persistidos en el sandbox / JSON.
     func loadData() throws {
-        savedFavouriteMangas = try interactor.cargar()
+        savedFavouriteMangas = try interactor.loadMangas()
     }
     
+    // Función que persiste 1 manga como Favorito
     func saveFavourite() {
         do{
             try loadData()
             if !savedFavouriteMangas.contains(where: { $0.id == manga.id }) {
                 savedFavouriteMangas.append(manga)
             }
-            try interactor.guardar(array: savedFavouriteMangas)
+            try interactor.saveMangas(array: savedFavouriteMangas)
         } catch {
             showAlert = true
-            myError = .saveFavourite
+            mangaDetailError = .saveFavourite
         }
     }
     
+    // Función que verifica al iniciar la vista si un manga ha sido perisistido como favorito o no.
     func checkFavourite() {
         do {
             try loadData()
@@ -59,13 +53,14 @@ final class DetailViewModel: ObservableObject {
             }
         } catch {
             showAlert = true
-            myError = .checkFavourite
+            mangaDetailError = .checkFavourite
         }
     }
 }
 
+// Errores en caso de que falle alguna función.
 
-enum ErrorsMangaDetail : LocalizedError {
+enum MangaDetailErrors : LocalizedError {
     case saveFavourite
     case checkFavourite
     
@@ -79,13 +74,15 @@ enum ErrorsMangaDetail : LocalizedError {
     }
 }
 
-enum InformationButtons: CaseIterable, Identifiable {
+// Enum para el filtrado de información que el usuario desee ver
+
+enum InformationFilteringButtons: CaseIterable, Identifiable {
     case description
     case authors
     case details
-
+    
     var id: Self { self }
-
+    
     var title: String {
         switch self {
         case .description:

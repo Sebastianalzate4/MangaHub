@@ -11,6 +11,8 @@ struct DetailsSectionView: View {
     
     var manga: Manga
     
+    // Form para presentar todos los datos del manga. 
+    
     var body: some View {
         VStack {
             Form {
