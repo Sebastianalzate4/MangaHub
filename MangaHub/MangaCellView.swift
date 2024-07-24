@@ -12,25 +12,13 @@ struct MangaCellView: View {
     var manga: Manga
     
     var body: some View {
-        HStack {
+        HStack(alignment: .top) {
             
             MangaPosterView(manga: manga, size: .small)
             
             VStack(alignment: .leading) {
                 Text(manga.title)
-                    .font(.system(size: 15, weight: .bold, design: .rounded))
-                    .foregroundColor(Color.white)
-                    .multilineTextAlignment(.center)
-                    .lineLimit(1)
-                    .padding(.horizontal, 8)
-                    .frame(maxWidth: 200)
-                    .frame(height: 25)
-                    .background(Color.mangaHubColor)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .overlay{
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.black, lineWidth: 0.5)
-                    }
+                    .mangaTextModifier()
                     .padding(.trailing)
                 
                 Text("\(manga.authors.first?.firstName ?? "") \(manga.authors.first?.lastName ?? "")")

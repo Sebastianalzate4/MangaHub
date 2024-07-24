@@ -78,18 +78,7 @@ struct FilterDetailView: View {
                                 Text(author.authorCompleteName)
                                 Image(systemName: "chevron.right")
                             }
-                            .padding()
-                            .font(.system(.headline, design: .rounded))
-                            .bold()
-                            .foregroundColor(Color.white)
-                            .multilineTextAlignment(.center)
-                            .frame(maxWidth: .infinity)
-                            .background(Color.mangaHubColor)
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                            .overlay{
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.black, lineWidth: 0.5)
-                            }
+                            .mangaHubButtonSelected(isSelected: false)
                         }
                     }
                 }

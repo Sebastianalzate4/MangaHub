@@ -24,7 +24,7 @@ struct CategoriesListView: View {
                         } label: {
                             Text("Genres")
                         }
-                        .mangaHubButtonCategories(isSelected: viewmodel.categoryType == .genres)
+                        .mangaHubButtonSelected(isSelected: viewmodel.categoryType == .genres)
                         
                         Button {
                             viewmodel.Demographics()
@@ -32,7 +32,7 @@ struct CategoriesListView: View {
                         } label: {
                             Text("Demographics")
                         }
-                        .mangaHubButtonCategories(isSelected: viewmodel.categoryType == .demographics)
+                        .mangaHubButtonSelected(isSelected: viewmodel.categoryType == .demographics)
                         
                         Button {
                             viewmodel.Themes()
@@ -40,7 +40,7 @@ struct CategoriesListView: View {
                         } label: {
                             Text("Themes")
                         }
-                        .mangaHubButtonCategories(isSelected: viewmodel.categoryType == .themes)
+                        .mangaHubButtonSelected(isSelected: viewmodel.categoryType == .themes)
                     }
                     .padding(.horizontal)
                 }

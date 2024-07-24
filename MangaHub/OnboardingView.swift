@@ -37,14 +37,7 @@ struct OnboardingView: View {
                                         }
                                     } label: {
                                         Text("Previous")
-                                            .font(.title3)
-                                            .frame(maxWidth: .infinity)
-                                            .frame(height: 50)
-                                            .foregroundColor(.white)
-                                            .bold()
-                                            .background(Color.black)
-                                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                                            .padding(.horizontal)
+                                            .mangaHubButton(color: Color.black)
                                     }
                                 }
                                 
@@ -57,24 +50,10 @@ struct OnboardingView: View {
                                 } label: {
                                     if page.id == pages.last?.id {
                                         Text("Start!")
-                                            .font(.title3)
-                                            .frame(maxWidth: .infinity)
-                                            .frame(height: 50)
-                                            .foregroundColor(.white)
-                                            .bold()
-                                            .background(Color.mangaHubColor)
-                                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                                            .padding(.horizontal)
+                                            .mangaHubButton(color: Color.mangaHubColor)
                                     } else {
                                         Text("Next")
-                                            .font(.title3)
-                                            .frame(maxWidth: .infinity)
-                                            .frame(height: 50)
-                                            .foregroundColor(.white)
-                                            .bold()
-                                            .background(Color.mangaHubColor)
-                                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                                            .padding(.horizontal)
+                                            .mangaHubButton(color: Color.mangaHubColor)
                                     }
                                 }
                             }

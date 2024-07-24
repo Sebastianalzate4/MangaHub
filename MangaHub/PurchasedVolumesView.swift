@@ -25,10 +25,10 @@ struct PurchasedVolumesView: View {
                 .frame(maxWidth: .infinity)
                 .background(Color.mangaHubColor)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
-                .overlay(
+                .overlay {
                     RoundedRectangle(cornerRadius: 10)
                         .stroke(Color.black, lineWidth: 0.5)
-                )
+                }
                 .padding()
             
             // Grid creado a partir del total de volúmenes que tiene el manga.

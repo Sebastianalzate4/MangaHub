@@ -139,14 +139,7 @@ struct FavoriteMangaDetailView: View {
                         }
                     } label: {
                         Text("+ Add New")
-                            .font(.subheadline)
-                            .bold()
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 40)
-                            .foregroundColor(.white)
-                            .background(Color.mangaHubColor)
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                            .padding(.horizontal)
+                            .mangaHubButton(color: Color.mangaHubColor)
                     }
                 } else {
                     VStack {

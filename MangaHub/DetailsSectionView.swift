@@ -139,22 +139,13 @@ struct DetailsSectionView: View {
                     }
                 }
                 
-                
                 Section(header: Text("Link to website 🌐")) {
                     Link(destination: manga.validURL) {
                         HStack(spacing: 20.0) {
                             Image(systemName: "link")
-                                .font(.subheadline)
                             Text("Go to manga website")
-                                .font(.subheadline)
-                                .fontWeight(.semibold)
                         }
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.mangaHubColor)
-                        .foregroundColor(.white)
-                        .cornerRadius(10.0)
-                        .padding()
+                        .mangaHubButtonSelected(isSelected: false)
                     }
                 }
                 

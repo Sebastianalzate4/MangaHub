@@ -8,23 +8,12 @@
 import Foundation
 import SwiftUI
 
-//extension View {
-//    func mangaHubButton() -> some View {
-//        self
-//            .frame(maxWidth: .infinity)
-//            .frame(height: 40)
-//            .foregroundColor(.white)
-//            .background(
-//                LinearGradient(colors: [Color.yellow, Color.orange, Color.yellow], startPoint: .leading, endPoint: .trailing))
-//            .clipShape(Capsule())
-//            .padding(.horizontal)
-//    }
-//}
 
-
-// Identifica el botón seleccionado en la tab de 'Categories' para cambiarle el color. 
 extension View {
-    func mangaHubButtonCategories(isSelected: Bool) -> some View {
+    
+    // Modificador de apariencia de un botón y cambia el color si el botón es seleccionado.
+    // Authors, Website, Categories
+    func mangaHubButtonSelected(isSelected: Bool) -> some View {
         self
             .padding()
             .font(.system(.headline, design: .rounded))
@@ -34,9 +23,19 @@ extension View {
             .frame(maxWidth: .infinity)
             .background(isSelected ? Color.gray : Color.mangaHubColor)
             .clipShape(RoundedRectangle(cornerRadius: 10))
-            .overlay(RoundedRectangle(cornerRadius: 10)
-                .stroke(Color.black, lineWidth: 0.5))
+    }
+    
+    // Modificador para los botones de la 'OnboardingView', Add to Favorites de la 'MangaDetailView' y Add New de la 'PurchasedVolumesView'.
+    func mangaHubButton(color: Color) -> some View {
+        self
+            .font(.title3)
+            .frame(maxWidth: .infinity)
+            .frame(height: 50)
+            .foregroundColor(.white)
+            .bold()
+            .background(color)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .padding(.horizontal)
     }
 }
-
 

@@ -34,13 +34,7 @@ struct MangaDetailView: View {
                 } label: {
                     Label(viewmodel.isDisable ? "Added to Favourites" : "Add me to Favourites", systemImage: viewmodel.isDisable ? "checkmark.circle" : "star")
                 }
-                .font(.system(.headline, design: .rounded))
-                .frame(maxWidth: .infinity)
-                .frame(height: 40)
-                .foregroundColor(.white)
-                .background(viewmodel.isDisable ? Color.gray : Color.mangaHubColor)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                .padding(.horizontal)
+                .mangaHubButton(color: viewmodel.isDisable ? Color.gray : Color.mangaHubColor)
                 .disabled(viewmodel.isDisable)
                 .animation(.interactiveSpring(response: 0.5, dampingFraction: 1, blendDuration: 1), value: viewmodel.isDisable)
                 

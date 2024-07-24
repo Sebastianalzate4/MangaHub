@@ -57,19 +57,7 @@ struct MangasListView: View {
                                                     CustomGaugeView(isPercentage: false, value: manga.score, scale: 10, size: .small)
                                                 }
                                             Text(manga.title)
-                                                .font(.system(.headline, design: .rounded))
-                                                .foregroundColor(Color.white)
-                                                .multilineTextAlignment(.center)
-                                                .lineLimit(1)
-                                                .padding(.horizontal, 8)
-                                                .frame(maxWidth: .infinity)
-                                                .frame(height: 30)
-                                                .background(Color.mangaHubColor)
-                                                .clipShape(RoundedRectangle(cornerRadius: 10))
-                                                .overlay {
-                                                    RoundedRectangle(cornerRadius: 10)
-                                                        .stroke(Color.black, lineWidth: 0.5)
-                                                }
+                                                .mangaTextModifier()
                                         }
                                     }
                                     .onAppear {
