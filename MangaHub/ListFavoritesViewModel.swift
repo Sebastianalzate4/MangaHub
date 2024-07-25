@@ -14,6 +14,8 @@ final class ListFavoritesViewModel : ObservableObject {
     @Published var searchedManga = ""
     @Published var errorMessage: String = ""
     @Published var showAlert: Bool = false
+    @Published var lastFunctionCalled: FavoriteMangasListFunctions?
+    @Published var errorIndexSet: IndexSet?
     
     private let interactor : PersistenceProtocol
     
@@ -21,8 +23,9 @@ final class ListFavoritesViewModel : ObservableObject {
         self.interactor = interactor
     }
     
-    // Función que carga los favoritos desde el sandbox y luego los asigna al array 'loaderFavoriteMangas'
-    func showFavourites() {
+    // Función que carga los favoritos desde el sandbox y luego los asigna al array 'loadedFavoriteMangas'
+    func showFavorites() {
+        lastFunctionCalled = .showFavorites
         do {
             loadedFavoriteMangas = try interactor.loadMangas()
         } catch {
@@ -33,10 +36,12 @@ final class ListFavoritesViewModel : ObservableObject {
     
     // Función que elimina los mangas de la lista de favoritos y persiste el cambio.
     func deleteManga(indexSet: IndexSet) {
+        lastFunctionCalled = .deleteManga
         loadedFavoriteMangas.remove(atOffsets: indexSet)
         do {
             try interactor.saveMangas(array: loadedFavoriteMangas)
         } catch {
+            errorIndexSet = indexSet
             errorMessage = "Failed to save changes. Try closing the app and reopen it again."
             showAlert = true
         }
@@ -53,4 +58,9 @@ final class ListFavoritesViewModel : ObservableObject {
     }
 }
 
+// Representa las funciones usadas en 'FavoriteMangasList' para poder hacer una trazabilidad de cuál fue la última función en ser llamada.
 
+enum FavoriteMangasListFunctions {
+    case showFavorites
+    case deleteManga
+}

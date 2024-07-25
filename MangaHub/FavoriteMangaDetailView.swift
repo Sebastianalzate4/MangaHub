@@ -177,11 +177,7 @@ struct FavoriteMangaDetailView: View {
             Button("Try again"){
                 viewmodel.persistReadingVolume()
             }
-            Button {
-                viewmodel.showAlert = false
-            } label: {
-                Text("Cancel")
-            }
+            Button("Cancel", role: .cancel){}
         } message: {
             Text(viewmodel.errorMessage)
         }

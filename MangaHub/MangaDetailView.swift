@@ -32,7 +32,7 @@ struct MangaDetailView: View {
                     viewmodel.saveFavourite()
                     viewmodel.isDisable = true
                 } label: {
-                    Label(viewmodel.isDisable ? "Added to Favourites" : "Add me to Favourites", systemImage: viewmodel.isDisable ? "checkmark.circle" : "star")
+                    Label(viewmodel.isDisable ? "Added to Favorites" : "Add me to Favorites", systemImage: viewmodel.isDisable ? "checkmark.circle" : "star")
                 }
                 .mangaHubButton(color: viewmodel.isDisable ? Color.gray : Color.mangaHubColor)
                 .disabled(viewmodel.isDisable)
@@ -47,20 +47,17 @@ struct MangaDetailView: View {
         .onAppear {
             viewmodel.checkFavourite()
         }
-        .alert("Something went wrong", isPresented: $viewmodel.showAlert, presenting: viewmodel.mangaDetailError) { error in
+        .alert("Something went wrong", isPresented: $viewmodel.showAlert) {
             Button("Try again") {
-                switch error {
+                switch viewmodel.lastFunctionCalled {
                 case .checkFavourite: viewmodel.checkFavourite()
                 case .saveFavourite: viewmodel.saveFavourite()
+                default: break
                 }
             }
-            Button {
-                viewmodel.showAlert = false
-            } label: {
-                Text("Cancel")
-            }
+            Button("Cancel", role: .cancel){}
         } message: {
-            Text($0.errorDescription)
+            Text(viewmodel.errorMessage)
         }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {

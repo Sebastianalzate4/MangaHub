@@ -26,7 +26,7 @@ enum NetworkError: Error {
     case noHTTP
     case statuscode(Int)
     
-    var errorDescription: String {
+    var networkErrorDescription: String {
         switch self {
         case .noHTTP:
             "The response did not contain valid HTTP information."

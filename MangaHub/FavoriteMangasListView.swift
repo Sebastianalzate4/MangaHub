@@ -36,19 +36,26 @@ struct FavoriteMangasListView: View {
                     }
                 }
             }
-            
-            .alert("Something Went Wrong.", isPresented: $viewmodel.showAlert) {
-                Button(role: .cancel) {
-                    viewmodel.showAlert = false
-                } label: {
-                    Text("Ok")
+            .alert("Something went wrong", isPresented: $viewmodel.showAlert) {
+                Button("Try Again") {
+                    switch viewmodel.lastFunctionCalled {
+                    case .showFavorites:
+                        viewmodel.showFavorites()
+                    case .deleteManga:
+                        if let indexSet = viewmodel.errorIndexSet {
+                            viewmodel.deleteManga(indexSet: indexSet)
+                        }
+                    default:
+                        break
+                    }
                 }
+                Button("Cancel", role: .cancel) {}
             } message: {
                 Text(viewmodel.errorMessage)
             }
             .searchable(text: $viewmodel.searchedManga, placement: .navigationBarDrawer(displayMode: .always), prompt: Text("Search Favourite Manga"))
             .onAppear {
-                viewmodel.showFavourites()
+                viewmodel.showFavorites()
             }
             .navigationDestination(for: Manga.self) { manga in
                 FavoriteMangaDetailView(viewmodel: DetailFavoriteViewModel(manga: manga))

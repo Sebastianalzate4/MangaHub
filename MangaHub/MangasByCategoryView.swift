@@ -25,29 +25,26 @@ struct MangasByCategoryView: View {
                         viewmodel.isLastMangaByCategory(manga: manga, subcategory: subcategory)
                     }
             }
-            
         }
         .onAppear {
             viewmodel.categoryType = category
             viewmodel.mangasByCategoryTypeSelected(subcategory: subcategory)
         }
         .navigationTitle(subcategory)
-        .alert("Something went wrong", isPresented: $viewmodel.showAlert, presenting: viewmodel.mangasByCategoryError, actions: { error in
+        .alert("Something went wrong", isPresented: $viewmodel.showAlert) {
             Button("Try again") {
-                switch error {
-                case .fetchMangasByGenre : viewmodel.MangasByGenre(genre: subcategory)
-                case .fetchMangasByTheme : viewmodel.MangasByTheme(theme: subcategory)
-                case .fetchMangasByDemographic : viewmodel.MangasByDemographic(demographic: subcategory)
+                switch viewmodel.lastFunctionCalled {
+                case .mangasByGenre : viewmodel.MangasByGenre(genre: subcategory)
+                case .mangasByTheme : viewmodel.MangasByTheme(theme: subcategory)
+                case .mangasByDemographic : viewmodel.MangasByDemographic(demographic: subcategory)
+                default:
+                    break
                 }
             }
-            Button {
-                viewmodel.showAlert = false
-            } label: {
-                Text("Cancel")
-            }
-        }, message: {
-            Text($0.errorDescription)
-        })
+            Button("Cancel", role: .cancel){}
+        } message: {
+            Text(viewmodel.errorMessage)
+        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: {

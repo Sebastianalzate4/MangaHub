@@ -78,23 +78,19 @@ struct CategoriesListView: View {
             .navigationDestination(for: Author.self) { author in
                 MangasByAuthorView(path: $pathCategories, author: author)
             }
-            .alert("Something went wrong", isPresented: $viewmodel.showAlert, presenting: viewmodel.categoriesListError) { error in
-                Button {
-                    switch error {
-                    case .fetchGenres : viewmodel.Genres()
-                    case .fetchThemes : viewmodel.Themes()
-                    case .fetchDemographics : viewmodel.Demographics()
+            .alert("Something went wrong", isPresented: $viewmodel.showAlert) {
+                Button("Try Again") {
+                    switch viewmodel.categoryType {
+                    case .genres: viewmodel.Genres()
+                    case .themes: viewmodel.Themes()
+                    case .demographics: viewmodel.Demographics()
+                    default:
+                        break
                     }
-                } label: {
-                    Text("Try Again")
                 }
-                Button {
-                    viewmodel.showAlert = false
-                } label: {
-                    Text("Cancel")
-                }
+                Button("Cancel", role: .cancel) {}
             } message: {
-                Text($0.errorDescription)
+                Text(viewmodel.errorMessage)
             }
         }
     }

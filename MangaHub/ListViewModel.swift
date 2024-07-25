@@ -14,14 +14,13 @@ final class ListViewModel: ObservableObject {
     
     @Published var searchedText = ""
     @Published var wasSearchSuccessful = true
-    @Published var isSearchedNeeded = false
+    @Published var isSearchNeeded = false
     @Published var isBestMangaSelected = false
     @Published var isList = true
     
     @Published var errorMessage: String = ""
+    @Published var lastFunctionCalled : MangaListFunctions? // Rastreo de cuál fue la última función llamada para establecerla en el switch del alert en la vista.
     @Published var showAlert: Bool = false
-    @Published var mangasListError : MangasListErrors?
-    @Published var showAlertNetwork: Bool = false
     
     var page = 1
     var pageAuthor = 1
@@ -38,6 +37,7 @@ final class ListViewModel: ObservableObject {
     // Funciones que llaman a red para cargar los Mangas correspondientes y darle valor a los arrays marcados como @Published (mangas y magasByAuthor)
     
     func AllMangas() {
+        lastFunctionCalled = .allMangas
         Task {
             do {
                 let mangas = try await interactor.fetchAllMangasPaginated(page: page, mangasPerPage: mangasPerPage)
@@ -46,8 +46,14 @@ final class ListViewModel: ObservableObject {
                 }
             }  catch {
                 await MainActor.run {
-                    showAlert = true
-                    mangasListError = .allMangasError
+                    switch error {
+                    case let networkError as NetworkError:
+                        showAlert = true
+                        errorMessage = "It was not possible to load the list of mangas. \(networkError.networkErrorDescription)"
+                    default:
+                        showAlert = true
+                        errorMessage = "An unknown error has occurred. Verify your internet connection"
+                    }
                 }
             }
         }
@@ -55,6 +61,7 @@ final class ListViewModel: ObservableObject {
     
     
     func BestMangas() {
+        lastFunctionCalled = .bestMangas
         Task {
             do {
                 let mangas = try await interactor.fetchBestMangas(page: page, mangasPerPage: mangasPerPage)
@@ -63,12 +70,19 @@ final class ListViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run {
-                    showAlert = true
-                    mangasListError = .bestMangasError
+                    switch error {
+                    case let networkError as NetworkError:
+                        showAlert = true
+                        errorMessage = "It was not possible to load best mangas list. \(networkError.networkErrorDescription)"
+                    default:
+                        showAlert = true
+                        errorMessage = "An unknown error has occurred. Verify your internet connection"
+                    }
                 }
             }
         }
     }
+    
     
     func MangasByAuthor(idAuthor: String) {
         Task {
@@ -79,8 +93,14 @@ final class ListViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run {
-                    errorMessage = "Error loading mangas by author"
-                    showAlert = true
+                    switch error {
+                    case let networkError as NetworkError:
+                        showAlert = true
+                        errorMessage = "It was not possible to load the mangas of this author. \(networkError.networkErrorDescription)"
+                    default:
+                        showAlert = true
+                        errorMessage = "An unknown error has occurred. Verify your internet connection"
+                    }
                 }
             }
         }
@@ -92,10 +112,10 @@ final class ListViewModel: ObservableObject {
         if mangas.last?.id == manga.id {
             page += 1
             // Si no estamos buscando un manga y no hemos seleccionado los BestMangas -> Llamamos a todos los mangas en su siguiente página.
-            if isSearchedNeeded == false && isBestMangaSelected == false {
+            if isSearchNeeded == false && isBestMangaSelected == false {
                 AllMangas()
                 // Si buscamos un manga y no hemos seleccionado los BestMangas -> Llamamos a los mangas buscados en su siguiente página.
-            } else if isSearchedNeeded == true && isBestMangaSelected == false || isSearchedNeeded == true && isBestMangaSelected == true {
+            } else if isSearchNeeded == true && isBestMangaSelected == false || isSearchNeeded == true && isBestMangaSelected == true {
                 Task {
                     do {
                         let mangas = try await interactor.fetchSearchedMangas(text: searchedText, page: page)
@@ -104,17 +124,23 @@ final class ListViewModel: ObservableObject {
                         }
                     } catch {
                         await MainActor.run {
-                            mangasListError = .searchMangasError
-                            showAlert = true
+                            switch error {
+                            case let networkError as NetworkError:
+                                showAlert = true
+                                errorMessage = "It was not possible to show more results. \(networkError.networkErrorDescription)"
+                            default:
+                              break
+                            }
                         }
                     }
                 }
                 // Si no hemos buscado un manga y hemos seleccionado los BestMangas -> Llamamos a los mejores mangas en su siguiente página.
-            } else if isSearchedNeeded == false && isBestMangaSelected == true {
+            } else if isSearchNeeded == false && isBestMangaSelected == true {
                 BestMangas()
             }
         }
     }
+    
     
     func isLastMangaByAuthor(manga: Manga, idAuthor: String) {
         if mangasByAuthor.last?.id == manga.id {
@@ -127,6 +153,7 @@ final class ListViewModel: ObservableObject {
     // Función que realiza la búsqueda en red de los mangas que contengan el texto ingresado por el usuario:
     
     func searchManga(text: String) {
+        lastFunctionCalled = .searchMangas
         searchTask?.cancel()
         searchTask = nil
         searchTask = Task {
@@ -143,8 +170,14 @@ final class ListViewModel: ObservableObject {
                     }
                 } catch {
                     await MainActor.run {
-                        mangasListError = .searchMangasError
-                        showAlert = true
+                        switch error {
+                        case let networkError as NetworkError:
+                            showAlert = true
+                            errorMessage = "It was not possible to execute the search. \(networkError.networkErrorDescription)"
+                        default:
+                            // Aquí entraría si ocurre cualquier otro error no especificado como la cancelación de la tarea, ausencia de conexión a internet, etc.
+                          break // Hago un break porque de lo contrario, salta una alerta cada vez que se cancela una tarea que ya empezó luego del sleep.
+                        }
                     }
                 }
             } catch {
@@ -160,13 +193,13 @@ final class ListViewModel: ObservableObject {
         if searchedText.isEmpty {
             searchTask?.cancel()
             mangas.removeAll()
-            isSearchedNeeded = false
+            isSearchNeeded = false
             isBestMangaSelected = false
             page = 1
             AllMangas()
         } else {
             mangas.removeAll()
-            isSearchedNeeded = true
+            isSearchNeeded = true
             page = 1
             searchManga(text: searchedText)
         }
@@ -185,27 +218,16 @@ final class ListViewModel: ObservableObject {
     func resetAllMangas() {
         mangas.removeAll()
         page = 1
-        isSearchedNeeded = false
+        isSearchNeeded = false
         isBestMangaSelected = false
         AllMangas()
     }
 }
 
-// Errores en caso de que falle alguna función.
 
-enum MangasListErrors : LocalizedError {
-    case allMangasError
-    case bestMangasError
-    case searchMangasError
-    
-    var errorDescription: String {
-        switch self {
-        case .allMangasError:
-            "Error loading mangas"
-        case .bestMangasError:
-            "Error loading best mangas"
-        case .searchMangasError:
-            "Error searching the manga"
-        }
-    }
+// Representa las funciones usadas en 'MangaListView' para poder hacer una trazabilidad de cuál fue la última función en ser llamada.
+enum MangaListFunctions {
+    case allMangas
+    case bestMangas
+    case searchMangas
 }

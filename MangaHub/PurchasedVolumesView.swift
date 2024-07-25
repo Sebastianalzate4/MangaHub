@@ -34,26 +34,22 @@ struct PurchasedVolumesView: View {
             // Grid creado a partir del total de volúmenes que tiene el manga.
             if let volumes = viewmodel.manga.volumes {
                 LazyVGrid(columns: flexibleColumns) {
-                    ForEach(1...volumes, id: \.self) { volumen in
+                    ForEach(1...volumes, id: \.self) { volume in
                         Button {
                             // Cada uno de los elementos del grid es un botón para poder ser pulsado y realizar la persistencia de ese volúmen en particular o eliminarlo en su defecto en caso de ya haber sido pulsado previamente.
-                            viewmodel.persistPurchasedVolumes(volume: volumen)
+                            viewmodel.persistPurchasedVolumes(volume: volume)
                         } label: {
-                            Text(String(volumen))
+                            Text(String(volume))
                                 .foregroundStyle(.white)
                         }
                         .frame(width: 50, height: 50)
-                        .background(viewmodel.volumes.contains(volumen) ? Color.mangaHubColor : Color.gray)
+                        .background(viewmodel.volumes.contains(volume) ? Color.mangaHubColor : Color.gray)
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                         .alert("Something went wrong", isPresented: $viewmodel.showAlert) {
                             Button("Try again"){
-                                viewmodel.persistPurchasedVolumes(volume: volumen)
+                                viewmodel.persistPurchasedVolumes(volume: volume)
                             }
-                            Button {
-                                viewmodel.showAlert = false
-                            } label: {
-                                Text("Cancel")
-                            }
+                            Button("Cancel", role: .cancel){}
                         } message: {
                             Text(viewmodel.errorMessage)
                         }

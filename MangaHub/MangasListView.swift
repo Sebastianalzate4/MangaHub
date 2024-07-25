@@ -43,7 +43,7 @@ struct MangasListView: View {
                                         viewmodel.isLastManga(manga: manga)
                                     }
                             }
-                       
+                            
                         }
                     } else {
                         ScrollView {
@@ -79,35 +79,24 @@ struct MangasListView: View {
             .onChange(of: viewmodel.searchedText) {
                 viewmodel.onChangeText()
             }
-            .alert("Something went wrong", isPresented: $viewmodel.showAlert, presenting: viewmodel.mangasListError) { error in
+            .alert("Something went wrong", isPresented: $viewmodel.showAlert) {
                 Button("Try again") {
-                    switch error {
-                    case .allMangasError: viewmodel.AllMangas()
-                    case .bestMangasError: viewmodel.BestMangas()
-                    case .searchMangasError: viewmodel.searchManga(text: viewmodel.searchedText)
+                    switch viewmodel.lastFunctionCalled {
+                    case .allMangas:
+                        viewmodel.AllMangas()
+                    case .bestMangas:
+                        viewmodel.BestMangas()
+                    case .searchMangas:
+                        viewmodel.searchManga(text: viewmodel.searchedText)
+                    default:
+                        break
                     }
                 }
-                
-                Button {
-                    viewmodel.showAlert = false
-                } label: {
-                    Text("Cancel")
-                }
-            } message: {
-                Text($0.errorDescription)
-            }
-            .alert("Something Went Wrong", isPresented: $viewmodel.showAlertNetwork) {
-                Button("Cancel") {
-                    viewmodel.showAlertNetwork = false
-                }
+                Button("Cancel", role: .cancel) {}
             } message: {
                 Text(viewmodel.errorMessage)
             }
             .searchable(text: $viewmodel.searchedText)
-            //            .refreshable {
-            //                switch viewmodel.
-            //                viewmodel.AllMangas()
-            //            }
             .navigationTitle("Mangas")
             .toolbar {
                 ToolbarItemGroup(placement: .secondaryAction) {

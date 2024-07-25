@@ -27,18 +27,14 @@ struct MangasByAuthorView: View {
         .onAppear {
             viewmodel.MangasByAuthor(idAuthor: author.id)
         }
-        .alert("Something went wrong", isPresented: $viewmodel.showAlert, actions: {
+        .alert("Something went wrong", isPresented: $viewmodel.showAlert) {
             Button("Try again") {
                 viewmodel.MangasByAuthor(idAuthor: author.id)
             }
-            Button {
-                viewmodel.showAlert = false
-            } label: {
-                Text("Cancel")
-            }
-        }, message: {
+            Button("Cancel", role: .cancel) {}
+        } message: {
             Text(viewmodel.errorMessage)
-        })
+        }
         .navigationTitle(author.authorCompleteName)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {

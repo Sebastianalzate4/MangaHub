@@ -11,11 +11,12 @@ import Foundation
 final class DetailViewModel: ObservableObject {
     
     var manga: Manga
-    var savedFavouriteMangas : [Manga] = []
+    var savedFavouriteMangas: [Manga] = []
     
     @Published var isDisable = false
     @Published var showAlert: Bool = false
-    @Published var mangaDetailError : MangaDetailErrors?
+    @Published var errorMessage: String = ""
+    @Published var lastFunctionCalled: MangaDetailFunctions?
     
     private let interactor : PersistenceProtocol
     
@@ -32,6 +33,7 @@ final class DetailViewModel: ObservableObject {
     
     // Función que persiste 1 manga como Favorito
     func saveFavourite() {
+        lastFunctionCalled = .saveFavourite
         do{
             try loadData()
             if !savedFavouriteMangas.contains(where: { $0.id == manga.id }) {
@@ -40,12 +42,13 @@ final class DetailViewModel: ObservableObject {
             try interactor.saveMangas(array: savedFavouriteMangas)
         } catch {
             showAlert = true
-            mangaDetailError = .saveFavourite
+            errorMessage = "Error saving manga as favourite"
         }
     }
     
     // Función que verifica al iniciar la vista si un manga ha sido perisistido como favorito o no.
     func checkFavourite() {
+        lastFunctionCalled = .checkFavourite
         do {
             try loadData()
             if savedFavouriteMangas.contains(where: { $0.id == manga.id }) {
@@ -53,25 +56,15 @@ final class DetailViewModel: ObservableObject {
             }
         } catch {
             showAlert = true
-            mangaDetailError = .checkFavourite
+            errorMessage = "Error loading manga data"
         }
     }
 }
 
-// Errores en caso de que falle alguna función.
-
-enum MangaDetailErrors : LocalizedError {
+// Representa las funciones llamadas en la vista 'MangaDetailView'
+enum MangaDetailFunctions {
     case saveFavourite
     case checkFavourite
-    
-    var errorDescription: String {
-        switch self {
-        case .saveFavourite:
-            "Error saving manga as favourite"
-        case .checkFavourite:
-            "Error loading manga data"
-        }
-    }
 }
 
 // Enum para el filtrado de información que el usuario desee ver

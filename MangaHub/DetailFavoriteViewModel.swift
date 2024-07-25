@@ -72,11 +72,10 @@ final class DetailFavoriteViewModel: ObservableObject {
             }
             try interactor.saveMangas(array: savedFavouriteMangas)
         } catch {
-            errorMessage = "Error persisting your volumes"
+            errorMessage = "Error persisting your purchased volume"
             showAlert = true
         }
     }
-    
 }
 
 

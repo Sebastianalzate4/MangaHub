@@ -14,8 +14,8 @@ final class CategoriesViewModel: ObservableObject {
     @Published var mangasByCategory: [Manga] = []
     @Published var categoryType: categoryType?
     @Published var showAlert: Bool = false
-    @Published var categoriesListError : CategoriesListErrors?
-    @Published var mangasByCategoryError : MangasByCategoryErrors?
+    @Published var errorMessage: String = ""
+    @Published var lastFunctionCalled : MangasByCategoryFunctions?
     
     var pageCategories = 1
     var mangasPerPage = 10
@@ -62,12 +62,19 @@ final class CategoriesViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run {
-                    showAlert = true
-                    categoriesListError = .fetchGenres
+                    switch error {
+                    case let networkError as NetworkError:
+                        showAlert = true
+                        errorMessage = "Error loading Genres. \(networkError.networkErrorDescription)"
+                    default:
+                        showAlert = true
+                        errorMessage = "An unknown error has occurred. Verify your internet connection"
+                    }
                 }
             }
         }
     }
+    
     
     func Demographics() {
         mangasByCategory.removeAll()
@@ -79,12 +86,19 @@ final class CategoriesViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run {
-                    showAlert = true
-                    categoriesListError = .fetchDemographics
+                    switch error {
+                    case let networkError as NetworkError:
+                        showAlert = true
+                        errorMessage = "Error loading Demographics. \(networkError.networkErrorDescription)"
+                    default:
+                        showAlert = true
+                        errorMessage = "An unknown error has occurred. Verify your internet connection"
+                    }
                 }
             }
         }
     }
+    
     
     func Themes() {
         mangasByCategory.removeAll()
@@ -96,8 +110,14 @@ final class CategoriesViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run {
-                    showAlert = true
-                    categoriesListError = .fetchThemes
+                    switch error {
+                    case let networkError as NetworkError:
+                        showAlert = true
+                        errorMessage = "Error loading Themes. \(networkError.networkErrorDescription)"
+                    default:
+                        showAlert = true
+                        errorMessage = "An unknown error has occurred. Verify your internet connection"
+                    }
                 }
             }
         }
@@ -107,6 +127,7 @@ final class CategoriesViewModel: ObservableObject {
     // Funciones que llaman al listado de mangas de acuerdo a la categoría y subcategoría seleccionada:
     
     func MangasByGenre(genre: String) {
+        lastFunctionCalled = .mangasByGenre
         Task {
             do {
                 let mangas = try await interactor.fetchMangasByGenre(genre: genre, page: pageCategories)
@@ -115,16 +136,22 @@ final class CategoriesViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run {
-                    showAlert = true
-                    mangasByCategoryError = .fetchMangasByGenre
+                    switch error {
+                    case let networkError as NetworkError:
+                        showAlert = true
+                        errorMessage = "Error loading mangas by genre. \(networkError.networkErrorDescription)"
+                    default:
+                        showAlert = true
+                        errorMessage = "An unknown error has occurred. Verify your internet connection"
+                    }
                 }
             }
         }
     }
     
     
-    
     func MangasByDemographic(demographic: String) {
+        lastFunctionCalled = .mangasByDemographic
         Task {
             do {
                 let mangas = try await interactor.fetchMangasByDemographic(demographic: demographic, page: pageCategories)
@@ -133,16 +160,22 @@ final class CategoriesViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run {
-                    showAlert = true
-                    mangasByCategoryError = .fetchMangasByDemographic
+                    switch error {
+                    case let networkError as NetworkError:
+                        showAlert = true
+                        errorMessage = "Error loading mangas by demographic. \(networkError.networkErrorDescription)"
+                    default:
+                        showAlert = true
+                        errorMessage = "An unknown error has occurred. Verify your internet connection"
+                    }
                 }
             }
         }
     }
     
-    
-    
+
     func MangasByTheme(theme: String) {
+        lastFunctionCalled = .mangasByTheme
         Task {
             do {
                 let mangas = try await interactor.fetchMangasByTheme(theme: theme, page: pageCategories)
@@ -151,13 +184,21 @@ final class CategoriesViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run {
-                    showAlert = true
-                    mangasByCategoryError = .fetchMangasByTheme
+                    switch error {
+                    case let networkError as NetworkError:
+                        showAlert = true
+                        errorMessage = "Error loading mangas by theme. \(networkError.networkErrorDescription)"
+                    default:
+                        showAlert = true
+                        errorMessage = "An unknown error has occurred. Verify your internet connection"
+                    }
                 }
             }
         }
     }
 }
+
+// Usado para controlar el cambio de color de los botones en la vista 'CategoriesListView' al ser pulsados, controla también la alerta en la vista para identificar cuál función llamar en el botón de "Try Again" y además, establece el valor pasado como category a la siguiente vista 'MangasByCategory'.
 
 enum categoryType {
     case genres
@@ -165,43 +206,13 @@ enum categoryType {
     case themes
 }
 
-// Errores en caso de que falle alguna función para la vista de 'CategoriesListView':
 
-enum CategoriesListErrors : LocalizedError {
-    case fetchGenres
-    case fetchThemes
-    case fetchDemographics
-    
-    var errorDescription: String {
-        switch self {
-        case .fetchGenres:
-            "Error loading genres"
-        case .fetchThemes:
-            "Error loading themes"
-        case .fetchDemographics:
-            "Error loading demographics"
-            
-        }
-    }
-}
+// Representa las funciones usadas en 'MangaByCategoryView' para poder hacer una trazabilidad de cuál fue la última función en ser llamada.
 
-// Errores en caso de que falle alguna función para la vista de 'MangasByCategoryView':
-
-enum MangasByCategoryErrors: LocalizedError {
-    case fetchMangasByGenre
-    case fetchMangasByDemographic
-    case fetchMangasByTheme
-    
-    var errorDescription: String {
-        switch self {
-        case .fetchMangasByDemographic:
-            "Error loading mangas by demographic"
-        case .fetchMangasByGenre:
-            "Error loading mangas by genre"
-        case .fetchMangasByTheme:
-            "Error loading mangas by theme"
-        }
-    }
+enum MangasByCategoryFunctions {
+    case mangasByGenre
+    case mangasByDemographic
+    case mangasByTheme
 }
 
 
