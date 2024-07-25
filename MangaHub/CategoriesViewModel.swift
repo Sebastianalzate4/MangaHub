@@ -68,7 +68,7 @@ final class CategoriesViewModel: ObservableObject {
                         errorMessage = "Error loading Genres. \(networkError.networkErrorDescription)"
                     default:
                         showAlert = true
-                        errorMessage = "An unknown error has occurred. Verify your internet connection"
+                        errorMessage = "An unknown error has occurred. Please check your internet connection"
                     }
                 }
             }
@@ -92,7 +92,7 @@ final class CategoriesViewModel: ObservableObject {
                         errorMessage = "Error loading Demographics. \(networkError.networkErrorDescription)"
                     default:
                         showAlert = true
-                        errorMessage = "An unknown error has occurred. Verify your internet connection"
+                        errorMessage = "An unknown error has occurred. Please check your internet connection"
                     }
                 }
             }
@@ -116,7 +116,7 @@ final class CategoriesViewModel: ObservableObject {
                         errorMessage = "Error loading Themes. \(networkError.networkErrorDescription)"
                     default:
                         showAlert = true
-                        errorMessage = "An unknown error has occurred. Verify your internet connection"
+                        errorMessage = "An unknown error has occurred. Please check your internet connection"
                     }
                 }
             }
@@ -142,7 +142,7 @@ final class CategoriesViewModel: ObservableObject {
                         errorMessage = "Error loading mangas by genre. \(networkError.networkErrorDescription)"
                     default:
                         showAlert = true
-                        errorMessage = "An unknown error has occurred. Verify your internet connection"
+                        errorMessage = "An unknown error has occurred. Please check your internet connection"
                     }
                 }
             }
@@ -166,7 +166,7 @@ final class CategoriesViewModel: ObservableObject {
                         errorMessage = "Error loading mangas by demographic. \(networkError.networkErrorDescription)"
                     default:
                         showAlert = true
-                        errorMessage = "An unknown error has occurred. Verify your internet connection"
+                        errorMessage = "An unknown error has occurred. Please check your internet connection"
                     }
                 }
             }
@@ -190,7 +190,7 @@ final class CategoriesViewModel: ObservableObject {
                         errorMessage = "Error loading mangas by theme. \(networkError.networkErrorDescription)"
                     default:
                         showAlert = true
-                        errorMessage = "An unknown error has occurred. Verify your internet connection"
+                        errorMessage = "An unknown error has occurred. Please check your internet connection"
                     }
                 }
             }

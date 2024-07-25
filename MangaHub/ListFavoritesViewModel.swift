@@ -10,7 +10,6 @@ import Foundation
 final class ListFavoritesViewModel : ObservableObject {
     
     @Published var loadedFavoriteMangas : [Manga] = []
-    @Published var containsFavourites = false
     @Published var searchedManga = ""
     @Published var errorMessage: String = ""
     @Published var showAlert: Bool = false

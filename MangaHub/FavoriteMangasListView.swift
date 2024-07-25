@@ -53,7 +53,7 @@ struct FavoriteMangasListView: View {
             } message: {
                 Text(viewmodel.errorMessage)
             }
-            .searchable(text: $viewmodel.searchedManga, placement: .navigationBarDrawer(displayMode: .always), prompt: Text("Search Favourite Manga"))
+            .searchable(text: $viewmodel.searchedManga, placement: .navigationBarDrawer(displayMode: .always), prompt: Text("Search Favorite Manga"))
             .onAppear {
                 viewmodel.showFavorites()
             }

@@ -52,7 +52,7 @@ final class ListViewModel: ObservableObject {
                         errorMessage = "It was not possible to load the list of mangas. \(networkError.networkErrorDescription)"
                     default:
                         showAlert = true
-                        errorMessage = "An unknown error has occurred. Verify your internet connection"
+                        errorMessage = "An unknown error has occurred. Please check your internet connection"
                     }
                 }
             }
@@ -76,7 +76,7 @@ final class ListViewModel: ObservableObject {
                         errorMessage = "It was not possible to load best mangas list. \(networkError.networkErrorDescription)"
                     default:
                         showAlert = true
-                        errorMessage = "An unknown error has occurred. Verify your internet connection"
+                        errorMessage = "An unknown error has occurred. Please check your internet connection"
                     }
                 }
             }
@@ -99,7 +99,7 @@ final class ListViewModel: ObservableObject {
                         errorMessage = "It was not possible to load the mangas of this author. \(networkError.networkErrorDescription)"
                     default:
                         showAlert = true
-                        errorMessage = "An unknown error has occurred. Verify your internet connection"
+                        errorMessage = "An unknown error has occurred. Please check your internet connection"
                     }
                 }
             }

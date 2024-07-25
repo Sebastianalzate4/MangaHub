@@ -30,7 +30,7 @@ struct Manga: Codable, Identifiable, Hashable {
     // Nuevas propiedades para mi modelo de presentación:
     var purchasedVolumes: [Int]
     var readingVolume: Int
-    var id2 = UUID()
+    var uniqueID = UUID() // Tuve que agregar un identificador único porque al paginar desde 2 sitios de la app como Home y Categories al mismo tiempo, aparecía un error diciendo que los elementos se repetian varias veces.
     
     // Nuevas propiedades a patir de propiedades existentes para ser usadas en las vistas: 
     var formattedScore: String {

@@ -11,7 +11,7 @@ import Foundation
 final class DetailViewModel: ObservableObject {
     
     var manga: Manga
-    var savedFavouriteMangas: [Manga] = []
+    var savedFavoriteMangas: [Manga] = []
     
     @Published var isDisable = false
     @Published var showAlert: Bool = false
@@ -28,30 +28,30 @@ final class DetailViewModel: ObservableObject {
     
     // Función que carga los mangas que se encuentren persistidos en el sandbox / JSON.
     func loadData() throws {
-        savedFavouriteMangas = try interactor.loadMangas()
+        savedFavoriteMangas = try interactor.loadMangas()
     }
     
     // Función que persiste 1 manga como Favorito
-    func saveFavourite() {
-        lastFunctionCalled = .saveFavourite
+    func saveFavorite() {
+        lastFunctionCalled = .saveFavorite
         do{
             try loadData()
-            if !savedFavouriteMangas.contains(where: { $0.id == manga.id }) {
-                savedFavouriteMangas.append(manga)
+            if !savedFavoriteMangas.contains(where: { $0.id == manga.id }) {
+                savedFavoriteMangas.append(manga)
             }
-            try interactor.saveMangas(array: savedFavouriteMangas)
+            try interactor.saveMangas(array: savedFavoriteMangas)
         } catch {
             showAlert = true
-            errorMessage = "Error saving manga as favourite"
+            errorMessage = "Error saving manga as favorite"
         }
     }
     
     // Función que verifica al iniciar la vista si un manga ha sido perisistido como favorito o no.
-    func checkFavourite() {
-        lastFunctionCalled = .checkFavourite
+    func checkFavorite() {
+        lastFunctionCalled = .checkFavorite
         do {
             try loadData()
-            if savedFavouriteMangas.contains(where: { $0.id == manga.id }) {
+            if savedFavoriteMangas.contains(where: { $0.id == manga.id }) {
                 isDisable = true
             }
         } catch {
@@ -63,8 +63,8 @@ final class DetailViewModel: ObservableObject {
 
 // Representa las funciones llamadas en la vista 'MangaDetailView'
 enum MangaDetailFunctions {
-    case saveFavourite
-    case checkFavourite
+    case saveFavorite
+    case checkFavorite
 }
 
 // Enum para el filtrado de información que el usuario desee ver

@@ -29,7 +29,7 @@ struct MangaDetailView: View {
                 
                 // Botón para convertir un Manga en Favorito.
                 Button {
-                    viewmodel.saveFavourite()
+                    viewmodel.saveFavorite()
                     viewmodel.isDisable = true
                 } label: {
                     Label(viewmodel.isDisable ? "Added to Favorites" : "Add me to Favorites", systemImage: viewmodel.isDisable ? "checkmark.circle" : "star")
@@ -45,13 +45,13 @@ struct MangaDetailView: View {
             }
         }
         .onAppear {
-            viewmodel.checkFavourite()
+            viewmodel.checkFavorite()
         }
         .alert("Something went wrong", isPresented: $viewmodel.showAlert) {
             Button("Try again") {
                 switch viewmodel.lastFunctionCalled {
-                case .checkFavourite: viewmodel.checkFavourite()
-                case .saveFavourite: viewmodel.saveFavourite()
+                case .checkFavorite: viewmodel.checkFavorite()
+                case .saveFavorite: viewmodel.saveFavorite()
                 default: break
                 }
             }

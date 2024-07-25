@@ -29,9 +29,9 @@ enum NetworkError: Error {
     var networkErrorDescription: String {
         switch self {
         case .noHTTP:
-            "The response did not contain valid HTTP information."
+            "No valid HTTP information. Please check your internet connection and try again."
         case .statuscode(let code):
-            "Request failed with status code \(code)."
+            "Failed Request. Error: \(code). Please try again later."
         }
     }
 }

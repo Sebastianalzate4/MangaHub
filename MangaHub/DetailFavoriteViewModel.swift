@@ -11,7 +11,7 @@ import Foundation
 final class DetailFavoriteViewModel: ObservableObject {
     
     var manga: Manga
-    var savedFavouriteMangas : [Manga] = []
+    var savedFavoriteMangas : [Manga] = []
     
     @Published var readingValue: Int = 0
     @Published var volumes: [Int] = []
@@ -29,7 +29,7 @@ final class DetailFavoriteViewModel: ObservableObject {
 
     // Función que carga los mangas que se encuentren persistidos en el sandbox / JSON.
     func loadData() throws {
-        savedFavouriteMangas = try interactor.loadMangas()
+        savedFavoriteMangas = try interactor.loadMangas()
     }
     
     // Función que actualiza el número de volúmenes leídos por el usuario en la vista cada vez que se inicializa.
@@ -47,12 +47,12 @@ final class DetailFavoriteViewModel: ObservableObject {
         do {
             try loadData()
             manga.readingVolume = readingValue
-            if let index = savedFavouriteMangas.firstIndex(where: {$0.id == manga.id}) {
-                savedFavouriteMangas[index] = manga
+            if let index = savedFavoriteMangas.firstIndex(where: {$0.id == manga.id}) {
+                savedFavoriteMangas[index] = manga
             }
-            try interactor.saveMangas(array: savedFavouriteMangas)
+            try interactor.saveMangas(array: savedFavoriteMangas)
         } catch {
-            errorMessage = "Error persisting your reading volume"
+            errorMessage = "Error persisting your reading volume. Try closing the app and reopen it again."
             showAlert = true
         }
     }
@@ -67,12 +67,12 @@ final class DetailFavoriteViewModel: ObservableObject {
                 volumes.append(volume)
             }
             manga.purchasedVolumes = volumes
-            if let index = savedFavouriteMangas.firstIndex(where: {$0.id == manga.id}) {
-                savedFavouriteMangas[index] = manga
+            if let index = savedFavoriteMangas.firstIndex(where: {$0.id == manga.id}) {
+                savedFavoriteMangas[index] = manga
             }
-            try interactor.saveMangas(array: savedFavouriteMangas)
+            try interactor.saveMangas(array: savedFavoriteMangas)
         } catch {
-            errorMessage = "Error persisting your purchased volume"
+            errorMessage = "Error persisting your purchased volume. Try closing the app and reopen it again."
             showAlert = true
         }
     }

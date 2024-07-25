@@ -12,7 +12,7 @@ struct MangaCellView: View {
     var manga: Manga
     
     var body: some View {
-        HStack(alignment: .top) {
+        HStack(alignment: .center) {
             
             MangaPosterView(manga: manga, size: .small)
             
@@ -28,6 +28,8 @@ struct MangaCellView: View {
                 Text("**Score:** \(manga.formattedScore)")
                 
                 Text("**Year:** \(manga.formattedStartDate)")
+                
+                Text("**Status:** \(manga.formattedStatus)")
                 
             }
         }
