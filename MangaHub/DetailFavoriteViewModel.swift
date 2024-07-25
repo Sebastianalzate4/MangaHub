@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 final class DetailFavoriteViewModel: ObservableObject {
     
     var manga: Manga

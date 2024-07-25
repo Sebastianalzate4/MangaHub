@@ -9,7 +9,6 @@ import Foundation
 
 protocol NetworkProtocol {
     
-    func fetchAllMangas() async throws -> [Manga]
     func fetchAllMangasPaginated(page: Int, mangasPerPage: Int) async throws -> [Manga]
     func fetchBestMangas(page: Int, mangasPerPage: Int) async throws -> [Manga]
     
@@ -30,10 +29,6 @@ protocol NetworkProtocol {
 struct NetworkInteractor: NetworkProtocol {
     
     // Cada una de estas funciones hace uso de la función genérica para el llamado a red con su respectivo endpoint.
-    
-    func fetchAllMangas() async throws -> [Manga] {
-        return try await fetchDataGeneric(url: .allMangasURL, type: MangaGeneralDTO.self).items.map(\.mapToManga)
-    }
     
     func fetchBestMangas(page: Int = 1, mangasPerPage: Int = 10) async throws -> [Manga] {
         return try await fetchDataGeneric(url: .getBestMangasURL(page: page), type: MangaGeneralDTO.self).items.map(\.mapToManga)

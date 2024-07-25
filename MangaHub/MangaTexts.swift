@@ -8,10 +8,9 @@
 import Foundation
 import SwiftUI
 
-
 extension View {
     
-    // Text de la CellView, Grid de la MangaListView.
+    // Modificador para los titulos de la 'MangaCellView' y del Grid de la 'MangaListView'.
     func mangaTextModifier() -> some View {
         self
             .font(.system(.headline, design: .rounded))

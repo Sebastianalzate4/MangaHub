@@ -63,7 +63,6 @@ struct FilterDetailView: View {
             .tint(Color.mangaHubColor)
             .clipShape(RoundedRectangle(cornerRadius: 10))
             
-            
         case .authors: // Muestra el listado de autores de ese manga en particular.
             
             Text("Explore a curated list of manga created by the authors behind **\(viewmodel.manga.title)**. Click on an author's name to discover their complete works.")
@@ -73,7 +72,6 @@ struct FilterDetailView: View {
                 HStack(alignment: .center) {
                     ForEach(viewmodel.manga.authors) { author in
                         NavigationLink(value: author) {
-                            
                             HStack {
                                 Text(author.authorCompleteName)
                                 Image(systemName: "chevron.right")

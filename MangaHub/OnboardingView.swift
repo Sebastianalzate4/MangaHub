@@ -26,9 +26,7 @@ struct OnboardingView: View {
                     ForEach(pages) { page in
                         
                         VStack {
-                            
                             PageView(page: page)
-                            
                             HStack {
                                 if selectedIndex > 0 {
                                     Button {

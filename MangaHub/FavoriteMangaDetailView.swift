@@ -16,7 +16,6 @@ struct FavoriteMangaDetailView: View {
     var body: some View {
         
         ScrollView {
-            
             Group{
                 // Si el manga tiene volúmenes, podremos mostrar las vistas que son utilizadas como panel de control para llevar registro de la trazabilidad de los mangas comprados y leídos.
                 

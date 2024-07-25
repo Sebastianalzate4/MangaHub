@@ -41,12 +41,6 @@ extension Manga {
                     role: "Story & Art",
                     firstName: "Masashi",
                     lastName: "Kishimoto"
-                ),
-                Author(
-                    id: "AC7020D1-D99F-4846-8E23-9C86181959AF",
-                    role: "Story & Art",
-                    firstName: "Masashi",
-                    lastName: "Kishimoto"
                 )
             ],
             chapters: 700,

@@ -7,7 +7,7 @@
 
 import Foundation
 
-
+// Formateador para las fechas que llegan de la respuesta de red.
 extension DateFormatter {
     
     static let customDateFormatter: DateFormatter = {

@@ -12,7 +12,7 @@ import SwiftUI
 extension View {
     
     // Modificador de apariencia de un botón y cambia el color si el botón es seleccionado.
-    // Authors, Website, Categories
+    // Authors, Website, Categories.
     func mangaHubButtonSelected(isSelected: Bool) -> some View {
         self
             .padding()

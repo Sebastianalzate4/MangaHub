@@ -21,6 +21,7 @@ extension URL {
     static let demographicsURL: URL = listBaseURL.appending(path: "demographics")
     static let themesURL: URL = listBaseURL.appending(path: "themes")
     
+    // Nota: Mediante los 'prints' se puede apreciar la trazabilidad de la navegación y verificar que estamos en la url que queremos y corresponde.
     static func getSearchContainsURL(text: String, page: Int) -> URL {
         let url = searchBaseURL.appending(path: "mangasContains").appending(path: text)
             .appending(queryItems: [.getPage(pageNumber: page)])
@@ -73,7 +74,6 @@ extension URL {
         print(url)
         return url
     }
-    
 }
 
 

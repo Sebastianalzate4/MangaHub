@@ -47,7 +47,6 @@ struct DetailsSectionView: View {
                     }
                 }
                 
-                
                 Section(header: Text("Content 📖")) {
                     HStack {
                         Text("Chapters")
@@ -112,7 +111,6 @@ struct DetailsSectionView: View {
                         }
                     }
                     
-                    
                     HStack {
                         Text("Demographics")
                             .foregroundStyle(Color.secondary)
@@ -124,7 +122,6 @@ struct DetailsSectionView: View {
                             }
                         }
                     }
-                    
                     
                     HStack {
                         Text("Themes")

@@ -14,7 +14,7 @@ struct MangasByCategoryView: View {
     @StateObject var viewmodel = CategoriesViewModel()
     @Binding var pathCategories: NavigationPath
     var subcategory: String
-    var category: categoryType
+    var category: CategoryType
     
     var body: some View {
         

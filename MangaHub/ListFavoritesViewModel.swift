@@ -14,7 +14,7 @@ final class ListFavoritesViewModel : ObservableObject {
     @Published var errorMessage: String = ""
     @Published var showAlert: Bool = false
     @Published var lastFunctionCalled: FavoriteMangasListFunctions?
-    @Published var errorIndexSet: IndexSet?
+    @Published var errorIndexSet: IndexSet? // Variable para almacenar el indexset que se intentará eliminar. Si falla podremos hacer uso de ella en el botón de 'Try Again' de la alerta mostrada en la vista.
     
     private let interactor : PersistenceProtocol
     

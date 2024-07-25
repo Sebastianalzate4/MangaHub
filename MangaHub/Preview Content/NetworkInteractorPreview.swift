@@ -19,19 +19,15 @@ struct NetworkInteractorPreview: NetworkProtocol {
     }
     
     // No son usadas para mostrar datos en la Preview.
-    func fetchAllMangas() async throws -> [Manga]{ return [] }
     func fetchBestMangas(page: Int, mangasPerPage: Int) async throws -> [Manga]{ return [] }
-    
     func fetchMangasByGenre(genre: String, page: Int) async throws -> [Manga]{ return [] }
     func fetchMangasByTheme(theme: String, page: Int) async throws -> [Manga]{ return [] }
     func fetchMangasByDemographic(demographic: String, page: Int) async throws -> [Manga]{ return [] }
     func fetchMangasByAuthor(idAuthor: String, page: Int, mangasPerPage: Int) async throws -> [Manga]{ return [] }
-    
     func fetchGenres() async throws -> [String]{ return [] }
     func fetchDemographics() async throws -> [String]{ return [] }
     func fetchThemes() async throws -> [String]{ return [] }
     func fetchAuthors() async throws -> [Author]{ return [] }
-    
     func fetchSearchedMangas(text: String, page: Int) async throws -> [Manga]{ return [] }
 }
 

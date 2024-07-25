@@ -7,12 +7,11 @@
 
 import Foundation
 
-
 final class CategoriesViewModel: ObservableObject {
     
     @Published var subcategories: [String] = []
     @Published var mangasByCategory: [Manga] = []
-    @Published var categoryType: categoryType?
+    @Published var categoryType: CategoryType?
     @Published var showAlert: Bool = false
     @Published var errorMessage: String = ""
     @Published var lastFunctionCalled : MangasByCategoryFunctions?
@@ -200,7 +199,7 @@ final class CategoriesViewModel: ObservableObject {
 
 // Usado para controlar el cambio de color de los botones en la vista 'CategoriesListView' al ser pulsados, controla también la alerta en la vista para identificar cuál función llamar en el botón de "Try Again" y además, establece el valor pasado como category a la siguiente vista 'MangasByCategory'.
 
-enum categoryType {
+enum CategoryType {
     case genres
     case demographics
     case themes
