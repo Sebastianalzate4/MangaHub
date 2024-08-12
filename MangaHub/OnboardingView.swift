@@ -16,17 +16,18 @@ struct OnboardingView: View {
     var pages = Page.pages
     
     var body: some View {
-        
         NavigationStack {
+         
             ZStack {
                 Color.white
                     .ignoresSafeArea()
                 
                 TabView(selection: $selectedIndex) {
                     ForEach(pages) { page in
-                        
+                  
                         VStack {
                             PageView(page: page)
+                       
                             HStack {
                                 if selectedIndex > 0 {
                                     Button {
@@ -55,9 +56,7 @@ struct OnboardingView: View {
                                     }
                                 }
                             }
-                            .offset(y: 50)
-                            
-                            Spacer()
+                            .padding(.top, 40)
                         }
                         .tag(page.tag)
                     }
