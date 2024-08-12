@@ -17,48 +17,24 @@ struct OnboardingView: View {
     
     var body: some View {
         NavigationStack {
-         
             ZStack {
                 Color.white
                     .ignoresSafeArea()
                 
                 TabView(selection: $selectedIndex) {
                     ForEach(pages) { page in
-                  
-                        VStack {
-                            PageView(page: page)
-                       
-                            HStack {
-                                if selectedIndex > 0 {
-                                    Button {
-                                        if selectedIndex > 0 {
-                                            selectedIndex -= 1
-                                        }
-                                    } label: {
-                                        Text("Previous")
-                                            .mangaHubButton(color: Color.black)
-                                    }
-                                }
-                                
-                                Button {
-                                    if page.id == pages.last?.id {
-                                        isFirstLaunch = false
-                                    } else {
-                                        selectedIndex += 1
-                                    }
-                                } label: {
-                                    if page.id == pages.last?.id {
-                                        Text("Start!")
-                                            .mangaHubButton(color: Color.mangaHubColor)
-                                    } else {
-                                        Text("Next")
-                                            .mangaHubButton(color: Color.mangaHubColor)
-                                    }
-                                }
+                        PageView(page: page,
+                                 showPrevious: selectedIndex > 0,
+                                 onPrevious: { selectedIndex -= 1 },
+                                 onNext: {
+                            if page.id == pages.last?.id {
+                                isFirstLaunch = false
+                            } else {
+                                selectedIndex += 1
                             }
-                            .padding(.top, 40)
-                        }
+                        })
                         .tag(page.tag)
+                        .padding(.bottom)
                     }
                 }
                 .toolbar {
